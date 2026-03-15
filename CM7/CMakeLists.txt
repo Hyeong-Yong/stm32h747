@@ -54,12 +54,48 @@ enable_language(C ASM)
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
+    
+    App/ap
+    App/common
+    App/common/include
+    App/hw
+    App/hw/include
+    App/hw/include/qspi
+    App/hw/include/ovtoct
+    App/hw/include/galvano
+
+    # USB
+    App/hw/src/usb
+    App/hw/src/usb/usb_cdc
+    App/Middlewares/ST/STM32_USB_Device_Library/Core/Inc
 )
+
+file(GLOB SRC_FILES CONFIGURE_DEPENDS
+    App/ap/*.c
+    App/common/src/*.c
+    App/hw/*.c
+    App/hw/src/*.c
+    
+    # galvano
+    App/hw/src/galvano/*.c
+
+    # ovtoct
+    App/hw/src/ovtoct/*.c
+
+    # USB
+    App/hw/src/usb/*.c
+    App/hw/src/usb/usb_cdc/*.c
+    App/Middlewares/ST/STM32_USB_Device_Library/Core/Src/*.c
+)
+
 
 # Add sources to executable
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
+    ${SRC_FILES}
+
 )
+
 
 # Link directories setup
 target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
@@ -78,6 +114,45 @@ list(REMOVE_ITEM CMAKE_C_IMPLICIT_LINK_LIBRARIES ob)
 if((CMAKE_C_STANDARD EQUAL 90) OR (CMAKE_C_STANDARD EQUAL 99))
     message(ERROR "Generated code requires C11 or higher")
 endif()
+
+
+
+
+#
+# Core MCU flags, CPU, instruction set and FPU setup
+# Needs to be set properly for your MCU
+#
+set(CPU_PARAMETERS
+    -mthumb
+
+    # This needs attention to properly set for used MCU
+    -mcpu=cortex-m7                 # Modified
+    -mfpu=fpv5-d16                  # Modified
+    -mfloat-abi=hard                # Modified
+)
+
+
+#linkder_script_SRC는 비활성화 : 어디선가 호출되어서, 여기서 정의하면 두번 호출되어서 오류남
+set(PROJ_PATH                       ${CMAKE_CURRENT_SOURCE_DIR})
+#set(linker_script_SRC               ${PROJ_PATH}/STM32H750XBHx_FLASH.ld) # Modified
+set(EXECUTABLE                      ${CMAKE_PROJECT_NAME})
+
+#Linker options
+target_link_options(${EXECUTABLE} PRIVATE
+    #-T${linker_script_SRC}
+    ${CPU_PARAMETERS}
+    -Wl,-Map=${CMAKE_PROJECT_NAME}.map
+    --specs=nosys.specs
+    -u _printf_float                # STDIO float formatting support
+    -Wl,--start-group
+    -lc
+    -lm
+    -lstdc++
+    -lsupc++
+    -Wl,--end-group
+    -Wl,--print-memory-usage
+)
+
 
 
 

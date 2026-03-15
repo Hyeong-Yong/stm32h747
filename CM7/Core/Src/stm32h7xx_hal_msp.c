@@ -285,105 +285,106 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* hadc)
 }
 
 /**
-  * @brief ETH MSP Initialization
+  * @brief QSPI MSP Initialization
   * This function configures the hardware resources used in this example
-  * @param heth: ETH handle pointer
+  * @param hqspi: QSPI handle pointer
   * @retval None
   */
-void HAL_ETH_MspInit(ETH_HandleTypeDef* heth)
+void HAL_QSPI_MspInit(QSPI_HandleTypeDef* hqspi)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
-  if(heth->Instance==ETH)
+  RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
+  if(hqspi->Instance==QUADSPI)
   {
-    /* USER CODE BEGIN ETH_MspInit 0 */
+    /* USER CODE BEGIN QUADSPI_MspInit 0 */
 
-    /* USER CODE END ETH_MspInit 0 */
+    /* USER CODE END QUADSPI_MspInit 0 */
+
+  /** Initializes the peripherals clock
+  */
+    PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_QSPI;
+    PeriphClkInitStruct.QspiClockSelection = RCC_QSPICLKSOURCE_D1HCLK;
+    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
+    {
+      Error_Handler();
+    }
+
     /* Peripheral clock enable */
-    __HAL_RCC_ETH1MAC_CLK_ENABLE();
-    __HAL_RCC_ETH1TX_CLK_ENABLE();
-    __HAL_RCC_ETH1RX_CLK_ENABLE();
+    __HAL_RCC_QSPI_CLK_ENABLE();
 
-    __HAL_RCC_GPIOG_CLK_ENABLE();
     __HAL_RCC_GPIOC_CLK_ENABLE();
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    /**ETH GPIO Configuration
-    PG11     ------> ETH_TX_EN
-    PG12     ------> ETH_TXD1
-    PG13     ------> ETH_TXD0
-    PC1     ------> ETH_MDC
-    PA2     ------> ETH_MDIO
-    PA1     ------> ETH_REF_CLK
-    PA7     ------> ETH_CRS_DV
-    PC4     ------> ETH_RXD0
-    PC5     ------> ETH_RXD1
+    __HAL_RCC_GPIOB_CLK_ENABLE();
+    __HAL_RCC_GPIOF_CLK_ENABLE();
+    /**QUADSPI GPIO Configuration
+    PC10     ------> QUADSPI_BK1_IO1
+    PB6     ------> QUADSPI_BK1_NCS
+    PC9     ------> QUADSPI_BK1_IO0
+    PF6     ------> QUADSPI_BK1_IO3
+    PF7     ------> QUADSPI_BK1_IO2
+    PF10     ------> QUADSPI_CLK
     */
-    GPIO_InitStruct.Pin = GPIO_PIN_11|GPIO_PIN_12|GPIO_PIN_13;
+    GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_9;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF11_ETH;
-    HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
-
-    GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_4|GPIO_PIN_5;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF11_ETH;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    GPIO_InitStruct.Alternate = GPIO_AF9_QUADSPI;
     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-    GPIO_InitStruct.Pin = GPIO_PIN_2|GPIO_PIN_1|GPIO_PIN_7;
+    GPIO_InitStruct.Pin = GPIO_PIN_6;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF11_ETH;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    GPIO_InitStruct.Alternate = GPIO_AF10_QUADSPI;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-    /* USER CODE BEGIN ETH_MspInit 1 */
+    GPIO_InitStruct.Pin = GPIO_PIN_6|GPIO_PIN_7|GPIO_PIN_10;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    GPIO_InitStruct.Alternate = GPIO_AF9_QUADSPI;
+    HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
-    /* USER CODE END ETH_MspInit 1 */
+    /* USER CODE BEGIN QUADSPI_MspInit 1 */
+
+    /* USER CODE END QUADSPI_MspInit 1 */
 
   }
 
 }
 
 /**
-  * @brief ETH MSP De-Initialization
+  * @brief QSPI MSP De-Initialization
   * This function freeze the hardware resources used in this example
-  * @param heth: ETH handle pointer
+  * @param hqspi: QSPI handle pointer
   * @retval None
   */
-void HAL_ETH_MspDeInit(ETH_HandleTypeDef* heth)
+void HAL_QSPI_MspDeInit(QSPI_HandleTypeDef* hqspi)
 {
-  if(heth->Instance==ETH)
+  if(hqspi->Instance==QUADSPI)
   {
-    /* USER CODE BEGIN ETH_MspDeInit 0 */
+    /* USER CODE BEGIN QUADSPI_MspDeInit 0 */
 
-    /* USER CODE END ETH_MspDeInit 0 */
+    /* USER CODE END QUADSPI_MspDeInit 0 */
     /* Peripheral clock disable */
-    __HAL_RCC_ETH1MAC_CLK_DISABLE();
-    __HAL_RCC_ETH1TX_CLK_DISABLE();
-    __HAL_RCC_ETH1RX_CLK_DISABLE();
+    __HAL_RCC_QSPI_CLK_DISABLE();
 
-    /**ETH GPIO Configuration
-    PG11     ------> ETH_TX_EN
-    PG12     ------> ETH_TXD1
-    PG13     ------> ETH_TXD0
-    PC1     ------> ETH_MDC
-    PA2     ------> ETH_MDIO
-    PA1     ------> ETH_REF_CLK
-    PA7     ------> ETH_CRS_DV
-    PC4     ------> ETH_RXD0
-    PC5     ------> ETH_RXD1
+    /**QUADSPI GPIO Configuration
+    PC10     ------> QUADSPI_BK1_IO1
+    PB6     ------> QUADSPI_BK1_NCS
+    PC9     ------> QUADSPI_BK1_IO0
+    PF6     ------> QUADSPI_BK1_IO3
+    PF7     ------> QUADSPI_BK1_IO2
+    PF10     ------> QUADSPI_CLK
     */
-    HAL_GPIO_DeInit(GPIOG, GPIO_PIN_11|GPIO_PIN_12|GPIO_PIN_13);
+    HAL_GPIO_DeInit(GPIOC, GPIO_PIN_10|GPIO_PIN_9);
 
-    HAL_GPIO_DeInit(GPIOC, GPIO_PIN_1|GPIO_PIN_4|GPIO_PIN_5);
+    HAL_GPIO_DeInit(GPIOB, GPIO_PIN_6);
 
-    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_2|GPIO_PIN_1|GPIO_PIN_7);
+    HAL_GPIO_DeInit(GPIOF, GPIO_PIN_6|GPIO_PIN_7|GPIO_PIN_10);
 
-    /* USER CODE BEGIN ETH_MspDeInit 1 */
+    /* USER CODE BEGIN QUADSPI_MspDeInit 1 */
 
-    /* USER CODE END ETH_MspDeInit 1 */
+    /* USER CODE END QUADSPI_MspDeInit 1 */
   }
 
 }
@@ -626,16 +627,24 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     __HAL_RCC_UART4_CLK_ENABLE();
 
     __HAL_RCC_GPIOC_CLK_ENABLE();
+    __HAL_RCC_GPIOB_CLK_ENABLE();
     /**UART4 GPIO Configuration
-    PC10     ------> UART4_TX
     PC11     ------> UART4_RX
+    PB9     ------> UART4_TX
     */
-    GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_11;
+    GPIO_InitStruct.Pin = GPIO_PIN_11;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
     GPIO_InitStruct.Alternate = GPIO_AF8_UART4;
     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin = GPIO_PIN_9;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
+    GPIO_InitStruct.Alternate = GPIO_AF8_UART4;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
     /* UART4 DMA Init */
     /* UART4_RX Init */
@@ -681,10 +690,12 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
     __HAL_RCC_UART4_CLK_DISABLE();
 
     /**UART4 GPIO Configuration
-    PC10     ------> UART4_TX
     PC11     ------> UART4_RX
+    PB9     ------> UART4_TX
     */
-    HAL_GPIO_DeInit(GPIOC, GPIO_PIN_10|GPIO_PIN_11);
+    HAL_GPIO_DeInit(GPIOC, GPIO_PIN_11);
+
+    HAL_GPIO_DeInit(GPIOB, GPIO_PIN_9);
 
     /* UART4 DMA DeInit */
     HAL_DMA_DeInit(huart->hdmarx);
@@ -707,9 +718,9 @@ void HAL_PCD_MspInit(PCD_HandleTypeDef* hpcd)
   RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
   if(hpcd->Instance==USB_OTG_FS)
   {
-    /* USER CODE BEGIN USB_OTG_FS_MspInit 0 */
+    /* USER CODE BEGIN USB_OTG_FS_PCD_MspInit 0 */
 
-    /* USER CODE END USB_OTG_FS_MspInit 0 */
+    /* USER CODE END USB_OTG_FS_PCD_MspInit 0 */
 
   /** Initializes the peripherals clock
   */
@@ -738,82 +749,10 @@ void HAL_PCD_MspInit(PCD_HandleTypeDef* hpcd)
 
     /* Peripheral clock enable */
     __HAL_RCC_USB_OTG_FS_CLK_ENABLE();
-    /* USER CODE BEGIN USB_OTG_FS_MspInit 1 */
+    /* USER CODE BEGIN USB_OTG_FS_PCD_MspInit 1 */
 
-    /* USER CODE END USB_OTG_FS_MspInit 1 */
-  }
-  else if(hpcd->Instance==USB_OTG_HS)
-  {
-    /* USER CODE BEGIN USB_OTG_HS_MspInit 0 */
+    /* USER CODE END USB_OTG_FS_PCD_MspInit 1 */
 
-    /* USER CODE END USB_OTG_HS_MspInit 0 */
-
-  /** Initializes the peripherals clock
-  */
-    PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USB;
-    PeriphClkInitStruct.UsbClockSelection = RCC_USBCLKSOURCE_HSI48;
-    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
-    {
-      Error_Handler();
-    }
-
-  /** Enable USB Voltage detector
-  */
-    HAL_PWREx_EnableUSBVoltageDetector();
-
-    __HAL_RCC_GPIOB_CLK_ENABLE();
-    __HAL_RCC_GPIOI_CLK_ENABLE();
-    __HAL_RCC_GPIOC_CLK_ENABLE();
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    /**USB_OTG_HS GPIO Configuration
-    PB5     ------> USB_OTG_HS_ULPI_D7
-    PI11     ------> USB_OTG_HS_ULPI_DIR
-    PC0     ------> USB_OTG_HS_ULPI_STP
-    PC3     ------> USB_OTG_HS_ULPI_NXT
-    PB10     ------> USB_OTG_HS_ULPI_D3
-    PB11     ------> USB_OTG_HS_ULPI_D4
-    PA5     ------> USB_OTG_HS_ULPI_CK
-    PB1     ------> USB_OTG_HS_ULPI_D2
-    PB12     ------> USB_OTG_HS_ULPI_D5
-    PA3     ------> USB_OTG_HS_ULPI_D0
-    PB0     ------> USB_OTG_HS_ULPI_D1
-    PB13     ------> USB_OTG_HS_ULPI_D6
-    */
-    GPIO_InitStruct.Pin = GPIO_PIN_5|GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_1
-                          |GPIO_PIN_12|GPIO_PIN_0|GPIO_PIN_13;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF10_OTG2_HS;
-    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-    GPIO_InitStruct.Pin = GPIO_PIN_11;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF10_OTG2_HS;
-    HAL_GPIO_Init(GPIOI, &GPIO_InitStruct);
-
-    GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_3;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF10_OTG2_HS;
-    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-    GPIO_InitStruct.Pin = GPIO_PIN_5|GPIO_PIN_3;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF10_OTG2_HS;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-    /* Peripheral clock enable */
-    __HAL_RCC_USB_OTG_HS_CLK_ENABLE();
-    __HAL_RCC_USB_OTG_HS_ULPI_CLK_ENABLE();
-    /* USER CODE BEGIN USB_OTG_HS_MspInit 1 */
-
-    /* USER CODE END USB_OTG_HS_MspInit 1 */
   }
 
 }
@@ -828,9 +767,9 @@ void HAL_PCD_MspDeInit(PCD_HandleTypeDef* hpcd)
 {
   if(hpcd->Instance==USB_OTG_FS)
   {
-    /* USER CODE BEGIN USB_OTG_FS_MspDeInit 0 */
+    /* USER CODE BEGIN USB_OTG_FS_PCD_MspDeInit 0 */
 
-    /* USER CODE END USB_OTG_FS_MspDeInit 0 */
+    /* USER CODE END USB_OTG_FS_PCD_MspDeInit 0 */
     /* Peripheral clock disable */
     __HAL_RCC_USB_OTG_FS_CLK_DISABLE();
 
@@ -840,45 +779,9 @@ void HAL_PCD_MspDeInit(PCD_HandleTypeDef* hpcd)
     */
     HAL_GPIO_DeInit(GPIOA, GPIO_PIN_12|GPIO_PIN_11);
 
-    /* USER CODE BEGIN USB_OTG_FS_MspDeInit 1 */
+    /* USER CODE BEGIN USB_OTG_FS_PCD_MspDeInit 1 */
 
-    /* USER CODE END USB_OTG_FS_MspDeInit 1 */
-  }
-  else if(hpcd->Instance==USB_OTG_HS)
-  {
-    /* USER CODE BEGIN USB_OTG_HS_MspDeInit 0 */
-
-    /* USER CODE END USB_OTG_HS_MspDeInit 0 */
-    /* Peripheral clock disable */
-    __HAL_RCC_USB_OTG_HS_CLK_DISABLE();
-    __HAL_RCC_USB_OTG_HS_ULPI_CLK_DISABLE();
-
-    /**USB_OTG_HS GPIO Configuration
-    PB5     ------> USB_OTG_HS_ULPI_D7
-    PI11     ------> USB_OTG_HS_ULPI_DIR
-    PC0     ------> USB_OTG_HS_ULPI_STP
-    PC3     ------> USB_OTG_HS_ULPI_NXT
-    PB10     ------> USB_OTG_HS_ULPI_D3
-    PB11     ------> USB_OTG_HS_ULPI_D4
-    PA5     ------> USB_OTG_HS_ULPI_CK
-    PB1     ------> USB_OTG_HS_ULPI_D2
-    PB12     ------> USB_OTG_HS_ULPI_D5
-    PA3     ------> USB_OTG_HS_ULPI_D0
-    PB0     ------> USB_OTG_HS_ULPI_D1
-    PB13     ------> USB_OTG_HS_ULPI_D6
-    */
-    HAL_GPIO_DeInit(GPIOB, GPIO_PIN_5|GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_1
-                          |GPIO_PIN_12|GPIO_PIN_0|GPIO_PIN_13);
-
-    HAL_GPIO_DeInit(GPIOI, GPIO_PIN_11);
-
-    HAL_GPIO_DeInit(GPIOC, GPIO_PIN_0|GPIO_PIN_3);
-
-    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_5|GPIO_PIN_3);
-
-    /* USER CODE BEGIN USB_OTG_HS_MspDeInit 1 */
-
-    /* USER CODE END USB_OTG_HS_MspDeInit 1 */
+    /* USER CODE END USB_OTG_FS_PCD_MspDeInit 1 */
   }
 
 }
@@ -924,16 +827,16 @@ static void HAL_FMC_MspInit(void){
   PG2   ------> FMC_A12
   PF5   ------> FMC_A5
   PF4   ------> FMC_A4
-  PH2   ------> FMC_SDCKE0
+  PC0   ------> FMC_SDNWE
+  PC3   ------> FMC_SDCKE0
   PE10   ------> FMC_D7
-  PH3   ------> FMC_SDNE0
-  PH5   ------> FMC_SDNWE
   PF13   ------> FMC_A7
   PF14   ------> FMC_A8
   PE9   ------> FMC_D6
   PE11   ------> FMC_D8
   PD15   ------> FMC_D1
   PD14   ------> FMC_D0
+  PC2_C   ------> FMC_SDNE0
   PF12   ------> FMC_A6
   PF15   ------> FMC_A9
   PE12   ------> FMC_D9
@@ -983,12 +886,12 @@ static void HAL_FMC_MspInit(void){
   GPIO_InitStruct.Alternate = GPIO_AF12_FMC;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
-  GPIO_InitStruct.Pin = GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_5;
+  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_3|GPIO_PIN_2;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
   GPIO_InitStruct.Alternate = GPIO_AF12_FMC;
-  HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /* USER CODE BEGIN FMC_MspInit 1 */
 
@@ -1034,16 +937,16 @@ static void HAL_FMC_MspDeInit(void){
   PG2   ------> FMC_A12
   PF5   ------> FMC_A5
   PF4   ------> FMC_A4
-  PH2   ------> FMC_SDCKE0
+  PC0   ------> FMC_SDNWE
+  PC3   ------> FMC_SDCKE0
   PE10   ------> FMC_D7
-  PH3   ------> FMC_SDNE0
-  PH5   ------> FMC_SDNWE
   PF13   ------> FMC_A7
   PF14   ------> FMC_A8
   PE9   ------> FMC_D6
   PE11   ------> FMC_D8
   PD15   ------> FMC_D1
   PD14   ------> FMC_D0
+  PC2_C   ------> FMC_SDNE0
   PF12   ------> FMC_A6
   PF15   ------> FMC_A9
   PE12   ------> FMC_D9
@@ -1073,7 +976,7 @@ static void HAL_FMC_MspDeInit(void){
                           |GPIO_PIN_5|GPIO_PIN_4|GPIO_PIN_13|GPIO_PIN_14
                           |GPIO_PIN_12|GPIO_PIN_15|GPIO_PIN_11);
 
-  HAL_GPIO_DeInit(GPIOH, GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_5);
+  HAL_GPIO_DeInit(GPIOC, GPIO_PIN_0|GPIO_PIN_3|GPIO_PIN_2);
 
   /* USER CODE BEGIN FMC_MspDeInit 1 */
 

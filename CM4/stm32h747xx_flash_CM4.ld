@@ -35,14 +35,23 @@
 ENTRY(Reset_Handler)
 
 
-/* Specify the memory areas */
+/* Specify the memory areas 
+SDRAM1 => RAM_D1
+SDRAM2 => RAM_D2
+SDRAM3 => RAM_D3
+*/
+
 MEMORY
 {
 FLASH (rx)      : ORIGIN = 0x08100000, LENGTH = 1024K
-RAM (xrw)      : ORIGIN = 0x10000000, LENGTH = 288K
+SRAM1_D2 (xrw)      : ORIGIN = 0x10000000, LENGTH = 128K
+SRAM2_D2 (xrw)      : ORIGIN = 0x10020000, LENGTH = 128K
+SRAM3_D2 (xrw)      : ORIGIN = 0x10040000, LENGTH = 32K
+SRAM4_D3 (xrw)      : ORIGIN = 0x38000000, LENGTH = 64K
+
 }
 /* Highest address of the user mode stack */
-_estack = 0x10048000;    /* end of RAM */
+_estack =ORIGIN(SRAM1_D2) + LENGTH(SRAM1_D2);    /* end of RAM */
 /* Generate a link error if heap and stack don't fit into RAM */
 _Min_Heap_Size = 0x200;      /* required amount of heap  */
 _Min_Stack_Size = 0x400; /* required amount of stack */
@@ -120,6 +129,8 @@ SECTIONS
   _sidata = LOADADDR(.data);
 
   /* Initialized data sections goes into RAM, load LMA copy after code */
+
+  /* Initialized data sections goes into RAM, load LMA copy after code */
   .data : 
   {
     . = ALIGN(4);
@@ -128,7 +139,7 @@ SECTIONS
     *(.data*)          /* .data* sections */
 
     . = ALIGN(4);
-  } >RAM AT> FLASH
+  } >SRAM1_D2 AT> FLASH
 
   /* Initialized TLS data section */
   .tdata : ALIGN(4)
@@ -138,7 +149,7 @@ SECTIONS
     _edata = .;        /* define a global symbol at data end */
     PROVIDE(__data_end = .);
     PROVIDE(__tdata_end = .);
-  } >RAM AT> FLASH
+  } >SRAM1_D2 AT> FLASH
 
   PROVIDE( __tdata_start = ADDR(.tdata) );
   PROVIDE( __tdata_size = __tdata_end - __tdata_start );
@@ -165,7 +176,7 @@ SECTIONS
     *(.tbss .tbss.*)
     . = ALIGN(4);
     PROVIDE( __tbss_end = . );
-  } >RAM
+  } >SRAM1_D2
 
   PROVIDE( __tbss_start = ADDR(.tbss) );
   PROVIDE( __tbss_size = __tbss_end - __tbss_start );
@@ -190,7 +201,8 @@ SECTIONS
     _ebss = .;         /* define a global symbol at bss end */
     __bss_end__ = _ebss;
       PROVIDE( __bss_end = .);
-  } >RAM
+  } >SRAM1_D2
+
   PROVIDE( __non_tls_bss_start = ADDR(.bss) );
 
   PROVIDE( __bss_start = __tbss_start );
@@ -206,8 +218,16 @@ SECTIONS
     . = . + _Min_Heap_Size;
     . = . + _Min_Stack_Size;
     . = ALIGN(8);
-  } >RAM
+  } >SRAM1_D2
 
+  
+  .non_cache (NOLOAD):
+  {
+    . = ALIGN(4);      
+    *(.non_cache)
+    *(.non_cache*)   
+    . = ALIGN(4);       
+  } >SRAM3_D2 AT> FLASH     
   
 
   /* Remove information from the standard libraries */
