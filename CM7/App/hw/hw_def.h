@@ -20,7 +20,7 @@
 #define _USE_HW_OVTOCT
 
 #define _USE_HW_LED
-#define      HW_LED_MAX_CH          2
+#define      HW_LED_MAX_CH          3
 
 
 #define _USE_HW_USB

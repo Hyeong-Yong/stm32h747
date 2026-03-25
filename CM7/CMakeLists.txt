@@ -68,6 +68,10 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     App/hw/src/usb
     App/hw/src/usb/usb_cdc
     App/Middlewares/ST/STM32_USB_Device_Library/Core/Inc
+
+    #ETH
+    LWIP/App
+    LWIP/Target
 )
 
 file(GLOB SRC_FILES CONFIGURE_DEPENDS
@@ -86,6 +90,10 @@ file(GLOB SRC_FILES CONFIGURE_DEPENDS
     App/hw/src/usb/*.c
     App/hw/src/usb/usb_cdc/*.c
     App/Middlewares/ST/STM32_USB_Device_Library/Core/Src/*.c
+
+    # ETH
+    LWIP/App/*.c
+    LWIP/Target/*.c
 )
 
 
