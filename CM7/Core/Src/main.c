@@ -202,11 +202,11 @@ Error_Handler();
   
   hwInit();
   apInit();
-  osKernelInitialize();
-  MX_FREERTOS_Init();
+  //osKernelInitialize();
+  //MX_FREERTOS_Init();
 
   /* Start scheduler */
-  osKernelStart();
+  //osKernelStart();
   /* USER CODE BEGIN 2 */
 
   

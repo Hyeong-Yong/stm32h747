@@ -12,7 +12,7 @@
             "runEntry": "main",
             "serverShared": true, // Allows sharing the debug server with other sessions (needed for multi-core)
             "serverHaltAllCores": true, // Halts all cores when starting the debug session
-            "svdPath": "C:/ST/STM32CubeCLT_1.21.0/STMicroelectronics_CMSIS_SVD/STM32H747_CM7.svd", // SVD file for CM7 core
+            "svdPath": "C:/ST/STM32CubeCLT_1.18.0/STMicroelectronics_CMSIS_SVD/STM32H747_CM7.svd", // SVD file for CM7 core
             "imagesAndSymbols": [
                 {
                     "imageFileName": "${workspaceFolder}/CM4/build/stm32h747_cm4.elf" // Loads the CM4.elf image
@@ -35,7 +35,7 @@
             "serverApID": "3", // Specifies the Access Port ID for the CM4 core (core selection)
             "serverPort": "61239", // Port for the GDB server to connect (must be unique if running multiple sessions)
             "serverReset": "None", // No reset when starting this debug session
-            "svdPath": "C:/ST/STM32CubeCLT_1.21.0/STMicroelectronics_CMSIS_SVD/STM32H747_CM4.svd", // SVD file for CM4 core
+            "svdPath": "C:/ST/STM32CubeCLT_1.18.0/STMicroelectronics_CMSIS_SVD/STM32H747_CM4.svd", // SVD file for CM4 core
             "imagesAndSymbols": [
                 {
                     "symbolFileName": "${workspaceFolder}/CM4/build/stm32h747_cm4.elf" // Loads the CM4.elf symbols
