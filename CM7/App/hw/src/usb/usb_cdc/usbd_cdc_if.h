@@ -91,7 +91,7 @@
   */
 
 /** CDC Interface callback. */
-extern USBD_CDC_ItfTypeDef USBD_Interface_fops_FS;
+extern USBD_CDC_ItfTypeDef USBD_Interface_fops_HS;
 
 /* USER CODE BEGIN EXPORTED_VARIABLES */
 
@@ -116,7 +116,7 @@ uint32_t cdcIfWrite(uint8_t *p_data, uint32_t length);
 bool     cdcIfIsConnected(void);
 uint8_t  cdcIfGetType(void);
 uint8_t CDC_SoF_ISR(struct _USBD_HandleTypeDef *pdev);
-uint8_t CDC_Transmit_FS(USBD_HandleTypeDef *pdev, uint8_t* Buf, uint16_t Len);
+uint8_t CDC_Transmit_HS(USBD_HandleTypeDef *pdev, uint8_t* Buf, uint16_t Len);
 
 /**
   * @}

@@ -121,7 +121,7 @@ uint8_t * USBD_HS_ProductStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length
 uint8_t * USBD_HS_SerialStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
 uint8_t * USBD_HS_ConfigStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
 uint8_t * USBD_HS_InterfaceStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
-uint8_t *USBD_HS_BOSDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
+//uint8_t *USBD_HS_BOSDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
 
 /**
   * @}
@@ -143,7 +143,7 @@ USBD_DescriptorsTypeDef HS_Desc =
 , USBD_HS_InterfaceStrDescriptor
 ,
 #if ((USBD_LPM_ENABLED == 1) || (USBD_CLASS_BOS_ENABLED == 1))
-  USBD_HS_BOSDescriptor,
+//  USBD_HS_BOSDescriptor,
 #endif /* (USBD_LPM_ENABLED == 1) || (USBD_CLASS_BOS_ENABLED == 1) */
 };
 

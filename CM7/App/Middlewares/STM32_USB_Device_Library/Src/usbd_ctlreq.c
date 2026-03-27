@@ -470,12 +470,12 @@ static void USBD_GetDescriptor(USBD_HandleTypeDef *pdev, USBD_SetupReqTypedef *r
 #ifdef USE_USBD_COMPOSITE
         if ((uint8_t)(pdev->NumClasses) > 0U)
         {
-          pbuf = (uint8_t *)USBD_CMPSIT.GetHSConfigDescriptor(&len);
+          pbuf = (uint8_t *)USBD_CMPSIT.GetFSConfigDescriptor(&len);
         }
         else
 #endif /* USE_USBD_COMPOSITE */
         {
-          pbuf = (uint8_t *)pdev->pClass[0]->GetHSConfigDescriptor(&len);
+          pbuf = (uint8_t *)pdev->pClass[0]->GetFSConfigDescriptor(&len);
         }
         pbuf[1] = USB_DESC_TYPE_CONFIGURATION;
       }

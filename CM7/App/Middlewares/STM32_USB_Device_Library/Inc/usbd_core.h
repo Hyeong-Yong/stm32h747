@@ -16,6 +16,9 @@
   ******************************************************************************
   */
 
+#ifndef DEFE65B4_A5F3_4A61_86AD_70B6E8B65980
+#define DEFE65B4_A5F3_4A61_86AD_70B6E8B65980
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __USBD_CORE_H
 #define __USBD_CORE_H
@@ -173,3 +176,6 @@ USBD_DescHeaderTypeDef *USBD_GetNextDesc(uint8_t *pbuf, uint16_t *ptr);
   */
 
 
+
+
+#endif /* DEFE65B4_A5F3_4A61_86AD_70B6E8B65980 */

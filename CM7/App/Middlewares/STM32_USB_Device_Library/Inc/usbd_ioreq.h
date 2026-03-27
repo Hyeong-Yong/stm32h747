@@ -16,6 +16,9 @@
   ******************************************************************************
   */
 
+#ifndef DB0BDC55_A401_4595_ACBC_CA2097FEEA1B
+#define DB0BDC55_A401_4595_ACBC_CA2097FEEA1B
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __USBD_IOREQ_H
 #define __USBD_IOREQ_H
@@ -111,3 +114,6 @@ uint32_t USBD_GetRxCount(USBD_HandleTypeDef *pdev, uint8_t ep_addr);
   * @}
   */
 
+
+
+#endif /* DB0BDC55_A401_4595_ACBC_CA2097FEEA1B */
