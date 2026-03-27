@@ -187,15 +187,13 @@ SECTIONS
     . = ALIGN(8);
   } >RAM
 
-  
-  
   .non_cache (NOLOAD):
   {
     . = ALIGN(4);      
     *(.non_cache)
     *(.non_cache*)   
     . = ALIGN(4);       
-  } >RAM4
+  } >RAM4 AT> FLASH
   
   
   .lwip_sec (NOLOAD) :

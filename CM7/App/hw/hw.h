@@ -5,9 +5,6 @@
  *      Author: baram
  */
 
-#ifndef AFF5312D_5EB8_480A_AC07_8DD084817805
-#define AFF5312D_5EB8_480A_AC07_8DD084817805
-
 #ifndef SRC_HW_HW_H_
 #define SRC_HW_HW_H_
 
@@ -43,6 +40,3 @@ void hwInit(void);
 #endif
 
 #endif /* SRC_HW_HW_H_ */
-
-
-#endif /* AFF5312D_5EB8_480A_AC07_8DD084817805 */

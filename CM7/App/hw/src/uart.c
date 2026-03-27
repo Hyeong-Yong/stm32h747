@@ -37,8 +37,8 @@ typedef struct
 
 
 //외부 참조 데이터
-extern UART_HandleTypeDef huart4;
-extern DMA_HandleTypeDef hdma_uart4_rx;
+extern UART_HandleTypeDef huart1;
+extern DMA_HandleTypeDef hdma_usart1_rx;
 
 // 내부 참조 데이터
 static bool is_init = false;
@@ -80,10 +80,10 @@ bool uartOpen(uint8_t ch, uint32_t baud)
   switch(ch)
   {
     case _DEF_UART1:
-      uart_tbl[ch].p_huart   = &huart4;
-      uart_tbl[ch].p_hdma_rx = &hdma_uart4_rx;
+      uart_tbl[ch].p_huart   = &huart1;
+      uart_tbl[ch].p_hdma_rx = &hdma_usart1_rx;
 
-      uart_tbl[ch].p_huart->Instance    = UART4;
+      uart_tbl[ch].p_huart->Instance    = USART1;
       uart_tbl[ch].p_huart->Init.BaudRate    = baud;
       uart_tbl[ch].p_huart->Init.WordLength  = UART_WORDLENGTH_8B;
       uart_tbl[ch].p_huart->Init.StopBits    = UART_STOPBITS_1;
@@ -95,19 +95,21 @@ bool uartOpen(uint8_t ch, uint32_t baud)
       uart_tbl[ch].p_huart->Init.ClockPrescaler = UART_PRESCALER_DIV1;
       uart_tbl[ch].p_huart->AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
 
+      hdma_usart1_rx.Init.Mode=DMA_CIRCULAR;
       HAL_UART_DeInit(uart_tbl[ch].p_huart);
 
       qbufferCreate(&uart_tbl[ch].q_rx, &uart_tbl[ch].q_rx_buf[0], UART_RX_BUF_LENGTH);
 
       __HAL_RCC_DMA1_CLK_ENABLE();
 
-      HAL_NVIC_SetPriority(DMA1_Stream0_IRQn, 5, 0);
-      HAL_NVIC_EnableIRQ(DMA1_Stream0_IRQn);
+      HAL_NVIC_SetPriority(DMA1_Stream1_IRQn, 5, 0);
+      HAL_NVIC_EnableIRQ(DMA1_Stream1_IRQn);
+
 
       if (HAL_UART_Init(uart_tbl[ch].p_huart) != HAL_OK)
-      {
-        ret = false;
-      }
+       {
+          ret = false;
+       }
       else
       {
         ret = true;
@@ -120,9 +122,13 @@ bool uartOpen(uint8_t ch, uint32_t baud)
 
         uart_tbl[ch].q_rx.in  = uart_tbl[ch].q_rx.len - ((DMA_Stream_TypeDef *)uart_tbl[ch].p_huart->hdmarx->Instance)->NDTR;
         uart_tbl[ch].q_rx.out = uart_tbl[ch].q_rx.in;
-      }
+      } 
+      
+      
       break;
 
+
+      
     case _DEF_UART2:
       uart_tbl[ch].is_open = true;
       ret = true;

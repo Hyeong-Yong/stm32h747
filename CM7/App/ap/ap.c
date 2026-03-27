@@ -30,13 +30,15 @@ void apMain(void)
   pre_time = millis();
   while(1)
   {
+
     if (millis()-pre_time >= 500)
     {
       pre_time = millis();
       ledToggle(_DEF_LED1);
-    }
 
-    ovtOct_GUI_Run();
+    }
+    //ovtOct_GUI_Run();
+
 
 
    cliMain();

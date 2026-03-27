@@ -67,11 +67,32 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # USB
     App/hw/src/usb
     App/hw/src/usb/usb_cdc
-    App/Middlewares/ST/STM32_USB_Device_Library/Core/Inc
+    App/Middlewares/STM32_USB_Device_Library/Inc
 
+    #freertos
+    App/Middlewares/FreeRTOS/Source/include
+    App/Middlewares/FreeRTOS/Source/CMSIS_RTOS_V2
+    App/Middlewares/FreeRTOS/Source/portable/GCC/ARM_CM4F
+    App/Middlewares/FreeRTOS/RTOS2/include
+
+    # LwIP
+    App/Middlewares/LwIP/src/include
+    App/Middlewares/LwIP/src/include/lwip
+    App/Middlewares/LwIP/src/include/lwip/apps
+    App/Middlewares/LwIP/src/include/lwip/priv
+    App/Middlewares/LwIP/src/include/lwip/prot
+    App/Middlewares/LwIP/src/include/netif
+    App/Middlewares/LwIP/src/include/netif/ppp
+    App/Middlewares/LwIP/src/include/compat
+    App/Middlewares/LwIP/src/include/compat/posix
+    App/Middlewares/LwIP/src/include/compat/posix/arpa
+    App/Middlewares/LwIP/src/include/compat/posix/net
+    App/Middlewares/LwIP/src/include/compat/posix/sys
+    App/Middlewares/LwIP/src/include/compat/stdc
+    App/Middlewares/LwIP/system
+    
     #ETH
-    LWIP/App
-    LWIP/Target
+    App/hw/src/eth
 )
 
 file(GLOB SRC_FILES CONFIGURE_DEPENDS
@@ -80,6 +101,9 @@ file(GLOB SRC_FILES CONFIGURE_DEPENDS
     App/hw/*.c
     App/hw/src/*.c
     
+    # ETH
+    App/hw/src/eth/*.c
+
     # galvano
     App/hw/src/galvano/*.c
 
@@ -89,11 +113,21 @@ file(GLOB SRC_FILES CONFIGURE_DEPENDS
     # USB
     App/hw/src/usb/*.c
     App/hw/src/usb/usb_cdc/*.c
-    App/Middlewares/ST/STM32_USB_Device_Library/Core/Src/*.c
+    App/Middlewares/STM32_USB_Device_Library/Src/*.c
 
-    # ETH
-    LWIP/App/*.c
-    LWIP/Target/*.c
+    #freertos
+    App/Middlewares/FreeRTOS/Source/*.c
+    App/Middlewares/FreeRTOS/Source/portable/GCC/ARM_CM4F/*.c
+    App/Middlewares/FreeRTOS/Source/portable/MemMang/*.c
+
+    #lwip
+    App/Middlewares/LwIP/src/core/*.c
+    App/Middlewares/LwIP/src/core/ipv4/*.c
+    App/Middlewares/LwIP/src/core/ipv6/*.c
+    App/Middlewares/LwIP/src/api/*.c
+    App/Middlewares/LwIP/src/netif/*.c
+    App/Middlewares/LwIP/src/apps/mqtt/*.c
+    App/Middlewares/LwIP/system/OS/*.c
 )
 
 

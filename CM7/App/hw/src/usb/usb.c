@@ -15,10 +15,10 @@
 static bool is_init = false;
 static UsbMode_t is_usb_mode = USB_NON_MODE;
 
-USBD_HandleTypeDef hUsbDeviceFS;
-extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
-extern USBD_CDC_ItfTypeDef USBD_Interface_fops_FS;
-extern USBD_DescriptorsTypeDef FS_Desc;
+USBD_HandleTypeDef hUsbDeviceHS;
+extern PCD_HandleTypeDef hpcd_USB_OTG_HS;
+extern USBD_CDC_ItfTypeDef USBD_Interface_fops_HS;
+extern USBD_DescriptorsTypeDef HS_Desc;
 //extern USBD_DescriptorsTypeDef MSC_Desc;
 //extern USBD_DescriptorsTypeDef HID_Desc;
 //extern USBD_DescriptorsTypeDef CMP_Desc;
@@ -64,19 +64,19 @@ bool usbBegin(UsbMode_t usb_mode)
     #if HW_USB_CDC == 1    
     
 
-  if (USBD_Init(&hUsbDeviceFS, &FS_Desc, DEVICE_FS) != USBD_OK)
+  if (USBD_Init(&hUsbDeviceHS, &HS_Desc, DEVICE_HS) != USBD_OK)
   {
     Error_Handler();
   }
-  if (USBD_RegisterClass(&hUsbDeviceFS, &USBD_CDC) != USBD_OK)
+  if (USBD_RegisterClass(&hUsbDeviceHS, &USBD_CDC) != USBD_OK)
   {
     Error_Handler();
   }
-  if (USBD_CDC_RegisterInterface(&hUsbDeviceFS, &USBD_Interface_fops_FS) != USBD_OK)
+  if (USBD_CDC_RegisterInterface(&hUsbDeviceHS, &USBD_Interface_fops_HS) != USBD_OK)
   {
     Error_Handler();
   }
-  if (USBD_Start(&hUsbDeviceFS) != USBD_OK)
+  if (USBD_Start(&hUsbDeviceHS) != USBD_OK)
   {
     Error_Handler();
   }
@@ -86,7 +86,7 @@ bool usbBegin(UsbMode_t usb_mode)
 
     is_usb_mode = USB_CDC_MODE;
     
-    p_desc = &FS_Desc;
+    p_desc = &HS_Desc;
     logPrintf("[OK] usbBegin()\n");
     logPrintf("     USB_CDC\r\n");
     #endif
@@ -170,7 +170,7 @@ void usbDeInit(void)
 {
   if (is_init == true)
   {
-    USBD_DeInit(&hUsbDeviceFS);
+    USBD_DeInit(&hUsbDeviceHS);
   }
 }
 
@@ -185,15 +185,15 @@ bool usbIsOpen(void)
 
 bool usbIsConnect(void)
 {
-  if (hUsbDeviceFS.pClassData == NULL)
+  if (hUsbDeviceHS.pClassData == NULL)
   {
     return false;
   }
-  if (hUsbDeviceFS.dev_state != USBD_STATE_CONFIGURED)
+  if (hUsbDeviceHS.dev_state != USBD_STATE_CONFIGURED)
   {
     return false;
   }
-  if (hUsbDeviceFS.dev_config == 0)
+  if (hUsbDeviceHS.dev_config == 0)
   {
     return false;
   }

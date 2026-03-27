@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2025 STMicroelectronics.
+  * Copyright (c) 2026 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -121,7 +121,6 @@ uint8_t * USBD_HS_ProductStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length
 uint8_t * USBD_HS_SerialStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
 uint8_t * USBD_HS_ConfigStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
 uint8_t * USBD_HS_InterfaceStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
-uint8_t *USBD_HS_BOSDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
 
 /**
   * @}
@@ -141,10 +140,6 @@ USBD_DescriptorsTypeDef HS_Desc =
 , USBD_HS_SerialStrDescriptor
 , USBD_HS_ConfigStrDescriptor
 , USBD_HS_InterfaceStrDescriptor
-,
-#if ((USBD_LPM_ENABLED == 1) || (USBD_CLASS_BOS_ENABLED == 1))
-  USBD_HS_BOSDescriptor,
-#endif /* (USBD_LPM_ENABLED == 1) || (USBD_CLASS_BOS_ENABLED == 1) */
 };
 
 #if defined ( __ICCARM__ ) /* IAR Compiler */
@@ -156,6 +151,7 @@ __ALIGN_BEGIN uint8_t USBD_HS_DeviceDesc[USB_LEN_DEV_DESC] __ALIGN_END =
   0x12,                       /*bLength */
   USB_DESC_TYPE_DEVICE,       /*bDescriptorType*/
   0x00,                       /*bcdUSB */
+
   0x02,
   0x02,                       /*bDeviceClass*/
   0x02,                       /*bDeviceSubClass*/
@@ -173,7 +169,6 @@ __ALIGN_BEGIN uint8_t USBD_HS_DeviceDesc[USB_LEN_DEV_DESC] __ALIGN_END =
   USBD_MAX_NUM_CONFIGURATION  /*bNumConfigurations*/
 };
 
-/* USB_DeviceDescriptor */
 /** BOS descriptor. */
 #if (USBD_LPM_ENABLED == 1)
 #if defined ( __ICCARM__ ) /* IAR Compiler */
@@ -185,12 +180,12 @@ __ALIGN_BEGIN uint8_t USBD_HS_BOSDesc[USB_SIZ_BOS_DESC] __ALIGN_END =
   USB_DESC_TYPE_BOS,
   0xC,
   0x0,
-  0x1,  /* 1 device capability*/
-        /* device capability*/
+  0x1,  /* 1 device capability */
+        /* device capability */
   0x7,
   USB_DEVICE_CAPABITY_TYPE,
   0x2,
-  0x2,  /* LPM capability bit set*/
+  0x2,  /*LPM capability bit set */
   0x0,
   0x0,
   0x0
@@ -270,9 +265,9 @@ uint8_t * USBD_HS_LangIDStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length)
 
 /**
   * @brief  Return the product string descriptor
-  * @param  speed : Current device speed
-  * @param  length : Pointer to data length variable
-  * @retval Pointer to descriptor buffer
+  * @param  speed : current device speed
+  * @param  length : pointer to data length variable
+  * @retval pointer to descriptor buffer
   */
 uint8_t * USBD_HS_ProductStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length)
 {
@@ -317,6 +312,7 @@ uint8_t * USBD_HS_SerialStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length)
   /* USER CODE BEGIN USBD_HS_SerialStrDescriptor */
 
   /* USER CODE END USBD_HS_SerialStrDescriptor */
+
   return (uint8_t *) USBD_StringSerial;
 }
 
@@ -357,6 +353,21 @@ uint8_t * USBD_HS_InterfaceStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *leng
   }
   return USBD_StrDesc;
 }
+
+#if (USBD_LPM_ENABLED == 1)
+/**
+  * @brief  Return the BOS descriptor
+  * @param  speed : Current device speed
+  * @param  length : Pointer to data length variable
+  * @retval Pointer to descriptor buffer
+  */
+uint8_t * USBD_HS_USR_BOSDescriptor(USBD_SpeedTypeDef speed, uint16_t *length)
+{
+  UNUSED(speed);
+  *length = sizeof(USBD_HS_BOSDesc);
+  return (uint8_t*)USBD_HS_BOSDesc;
+}
+#endif /* (USBD_LPM_ENABLED == 1) */
 
 /**
   * @brief  Create the serial number string descriptor

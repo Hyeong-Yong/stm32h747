@@ -16,7 +16,7 @@ void hwInit(void)
   gpioInit();
   cliInit();
   uartInit();
-  uartOpen(_DEF_UART1, 115200);
+  //uartOpen(_DEF_UART1, 115200);
   //flashInit();
   //qspiInit();
   //sdramInit();
