@@ -358,6 +358,23 @@ uint8_t * USBD_HS_InterfaceStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *leng
   return USBD_StrDesc;
 }
 
+
+#if (USBD_LPM_ENABLED == 1)
+/**
+  * @brief  Return the BOS descriptor
+  * @param  speed : Current device speed
+  * @param  length : Pointer to data length variable
+  * @retval Pointer to descriptor buffer
+  */
+uint8_t * USBD_HS_USR_BOSDescriptor(USBD_SpeedTypeDef speed, uint16_t *length)
+{
+  UNUSED(speed);
+  *length = sizeof(USBD_HS_BOSDesc);
+  return (uint8_t*)USBD_HS_BOSDesc;
+}
+#endif /* (USBD_LPM_ENABLED == 1) */
+
+
 /**
   * @brief  Create the serial number string descriptor
   * @param  None

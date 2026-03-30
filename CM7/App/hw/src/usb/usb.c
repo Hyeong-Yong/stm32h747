@@ -19,10 +19,6 @@ USBD_HandleTypeDef hUsbDeviceHS;
 extern PCD_HandleTypeDef hpcd_USB_OTG_HS;
 extern USBD_CDC_ItfTypeDef USBD_Interface_fops_HS;
 extern USBD_DescriptorsTypeDef HS_Desc;
-//extern USBD_DescriptorsTypeDef MSC_Desc;
-//extern USBD_DescriptorsTypeDef HID_Desc;
-//extern USBD_DescriptorsTypeDef CMP_Desc;
-
 static USBD_DescriptorsTypeDef *p_desc = NULL;
 
 #if HW_USB_CMP == 1
@@ -263,6 +259,12 @@ void cliCmd(cli_args_t *args)
     uint32_t pre_time;
     uint32_t tx_cnt = 0;
     uint32_t sent_len = 0;
+    uint8_t tx_buf[1024];
+
+  for (int i = 0; i < sizeof(tx_buf); i++)
+  {
+    tx_buf[i] = 'A' + (i % 26);
+  }
 
     pre_time = millis();
     while(cliKeepLoop())
@@ -273,7 +275,7 @@ void cliCmd(cli_args_t *args)
         logPrintf("tx : %ld KB/s\n", tx_cnt/1024);
         tx_cnt = 0;
       }
-      sent_len = cdcWrite((uint8_t *)"123456789012345678901234567890\n", 31);
+      sent_len = cdcWrite(tx_buf, sizeof(tx_buf));  
       tx_cnt += sent_len;
     }
     cliPrintf("\x1B[%dB", 2);
