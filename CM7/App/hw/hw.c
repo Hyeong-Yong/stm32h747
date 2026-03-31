@@ -17,9 +17,9 @@ void hwInit(void)
   cliInit();
   uartInit();
   uartOpen(_DEF_UART1, 115200);
-  //flashInit();
+  flashInit();
   //qspiInit();
-  //sdramInit();
+  sdramInit();
   spiInit();
   spiBegin(_DEF_SPI1);
   adcInit();

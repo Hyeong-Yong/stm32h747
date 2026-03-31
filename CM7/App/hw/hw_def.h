@@ -58,7 +58,7 @@ typedef enum
 
 
 #define _USE_HW_SDRAM
-#define      HW_SDRAM_MEM_ADDR      0xC0000000
+#define      HW_SDRAM_MEM_ADDR      0xD0000000
 #define      HW_SDRAM_MEM_SIZE      (32*1024*1024) // 32MB
 
 

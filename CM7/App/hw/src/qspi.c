@@ -10,6 +10,8 @@
 
 #include "qspi.h"
 #include "qspi/w25q128fv.h"
+#include "qspi/mt25ql512abb.h"
+#include "qspi/mt25ql512abb_conf.h"
 
 
 

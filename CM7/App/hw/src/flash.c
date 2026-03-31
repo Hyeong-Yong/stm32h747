@@ -14,7 +14,7 @@
 
 
 #define FLASH_MAX_SECTOR          1
-
+#define FLASH_INTERNAL_SIZE                  (1024*1024)
 
 typedef struct
 {
@@ -27,7 +27,7 @@ typedef struct
 
 const flash_tbl_t flash_tbl_bank1[FLASH_MAX_SECTOR] =
     {
-        {0, FLASH_BANK_1, 0x08000000, 128*1024},
+        {0, FLASH_BANK_1, 0x08000000, FLASH_INTERNAL_SIZE},
     };
 
 

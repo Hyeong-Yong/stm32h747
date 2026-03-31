@@ -37,7 +37,7 @@ void apMain(void)
       ledToggle(_DEF_LED1);
 
     }
-    //ovtOct_GUI_Run();
+    ovtOct_GUI_Run();
 
 
 

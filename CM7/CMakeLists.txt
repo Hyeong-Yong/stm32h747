@@ -69,6 +69,9 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     App/hw/src/usb/usb_cdc
     App/Middlewares/STM32_USB_Device_Library/Inc
 
+    # QSPI
+    App/hw/include/qspi
+
     #freertos
     App/Middlewares/FreeRTOS/Source/include
     App/Middlewares/FreeRTOS/Source/CMSIS_RTOS_V2

@@ -29,8 +29,8 @@ extern "C" {
 #include "galvano.h"
 //#include "dac8562.h"
 
-//#include "flash.h"
-//#include "sdram.h"
+#include "flash.h"
+#include "sdram.h"
 #include "tim.h"
 
 void hwInit(void);

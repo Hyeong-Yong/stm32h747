@@ -36,7 +36,9 @@
 ENTRY(Reset_Handler)
 
 /* Highest address of the user mode stack */
-_estack = 0x20020000;    /* end of RAM */
+_estack = ORIGIN(RAM) + LENGTH(RAM); /* end of "AXI_RAM" Ram type memory */
+
+
 /* Generate a link error if heap and stack don't fit into RAM */
 _Min_Heap_Size = 0x200;      /* required amount of heap  */
 _Min_Stack_Size = 0x1000; /* required amount of stack */
@@ -53,6 +55,7 @@ MEMORY
 	RAM4 (xrw)      : ORIGIN = 0x38000000, LENGTH = 64K /* .non_cache declared here. */
 	AXI_RAM (xrw)   : ORIGIN = 0x24000000, LENGTH = 512K	
 /*                                         Total = 992K   */
+  SDRAM (xrw)    : ORIGIN = 0xD0000000, LENGTH = 32M
 }
 
 /* Define output sections */
@@ -208,6 +211,15 @@ SECTIONS
     *(.Rx_PoolSection)  
   } >RAM1
 
+  .sdram_data (NOLOAD) :
+  {
+    . = ALIGN(4);
+    _sdsram_data = .;
+    *(.sdram_data)
+    *(.sdram_data*)
+    . = ALIGN(4);
+    _edsdram_data = .;
+  } >SDRAM
 
   /* Remove information from the standard libraries */
   /DISCARD/ :
