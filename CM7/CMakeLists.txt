@@ -17,6 +17,10 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Debug")
 endif()
 
+if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 11)
+string(APPEND CMAKE_EXE_LINKER_FLAGS " -wl, --no-warn-rwx-segments")
+endif()
+
 message("Build type: " ${CMAKE_BUILD_TYPE})
 
 # Enable compile command to ease indexing with e.g. clangd

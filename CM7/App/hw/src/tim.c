@@ -9,7 +9,7 @@ void timInit(void)
 }
 
 
-//TIMER2 : 96MHz/96 = 1Mhz => 1 us
+//TIMER2 : 100MHz/100 = 1Mhz => 1 us
 void delay_us(uint32_t us){
 	//__HAL_TIM_SET_COUNTER(&htim2, 0);
 	htim2.Instance->CNT = 0;

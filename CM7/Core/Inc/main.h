@@ -59,6 +59,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define DAC8562_SPI_SYNC_Pin GPIO_PIN_7
+#define DAC8562_SPI_SYNC_GPIO_Port GPIOC
 #define LED1_Pin GPIO_PIN_12
 #define LED1_GPIO_Port GPIOI
 #define LED2_Pin GPIO_PIN_13

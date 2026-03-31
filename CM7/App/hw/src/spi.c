@@ -22,7 +22,7 @@ typedef struct
   SPI_HandleTypeDef *h_spi;
 } spi_t;
 
-extern SPI_HandleTypeDef hspi4;
+extern SPI_HandleTypeDef hspi2;
 
 spi_t spi_tbl[SPI_MAX_CH];
 
@@ -52,7 +52,7 @@ bool spiBegin(uint8_t ch)
   switch(ch)
   {
     case _DEF_SPI1:
-      p_spi->h_spi = &hspi4;
+      p_spi->h_spi = &hspi2;
 
 
       //HAL_SPI_DeInit(p_spi->h_spi);
