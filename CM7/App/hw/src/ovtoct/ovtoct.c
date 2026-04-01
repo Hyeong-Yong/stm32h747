@@ -7,6 +7,11 @@
 #include "ovtoct_uart.h"
 #include "crc.h"
 
+#ifdef _USE_FREERTOS
+#include "cmsis_os.h"
+#endif
+
+
 ovtOct_packet_t packet;
 ovtOct_t ovtOct;
 
@@ -136,6 +141,9 @@ void ovt_Acquire()
             i++;
             uartWrite(_DEF_UART2, (uint8_t *)sendPacketBuf, ADC_BUF_SIZE * 3 + i);
         }
+           #ifdef _USE_FREERTOS
+              osDelay(1);
+              #endif
     }
 }
 

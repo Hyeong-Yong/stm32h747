@@ -42,6 +42,31 @@
 
 /* USER CODE BEGIN 0 */
 
+/* DHCP process states */
+#define DHCP_OFF                   (uint8_t) 0
+#define DHCP_START                 (uint8_t) 1
+#define DHCP_WAIT_ADDRESS          (uint8_t) 2
+#define DHCP_ADDRESS_ASSIGNED      (uint8_t) 3
+#define DHCP_TIMEOUT               (uint8_t) 4
+#define DHCP_LINK_DOWN             (uint8_t) 5
+
+/*Static IP ADDRESS: IP_ADDR0.IP_ADDR1.IP_ADDR2.IP_ADDR3 */
+#define IP_ADDR0   ((uint8_t) 192U)
+#define IP_ADDR1   ((uint8_t) 168U)
+#define IP_ADDR2   ((uint8_t) 50U)
+#define IP_ADDR3   ((uint8_t) 200U)
+
+/*NETMASK*/
+#define NETMASK_ADDR0   ((uint8_t) 255U)
+#define NETMASK_ADDR1   ((uint8_t) 255U)
+#define NETMASK_ADDR2   ((uint8_t) 255U)
+#define NETMASK_ADDR3   ((uint8_t) 0U)
+
+/*Gateway Address*/
+#define GW_ADDR0   ((uint8_t) 192U)
+#define GW_ADDR1   ((uint8_t) 168U)
+#define GW_ADDR2   ((uint8_t) 50U)
+#define GW_ADDR3   ((uint8_t) 1U)
 /* USER CODE END 0 */
 
 /* Global Variables ----------------------------------------------------------*/

@@ -9,6 +9,7 @@
 
 
 #include "ap.h"
+#include "cmsis_os.h"
 
 
 void apInit(void)
@@ -38,10 +39,12 @@ void apMain(void)
 
     }
     ovtOct_GUI_Run();
-
-
+    
+    
 
    cliMain();
-   
+   #ifdef _USE_FREERTOS
+   osDelay(1);
+   #endif
   }
 }
