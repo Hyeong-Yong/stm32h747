@@ -6,8 +6,28 @@
  */
 
 #include "hal_ethernet.h"
-#include "stm32f4xx_hal.h"				// Include hal header for your STM32 MCU
+#include "stm32h7xx_hal.h"				// Include hal header for your STM32 MCU
 #include "lwip.h"
+
+ // DMA malloc for lwip, not creating memory in the DTCM
+__attribute__((section(".lwip_sec"))) static uint8_t dma_heap[4 * 1024];
+
+static size_t dma_heap_offset = 0;
+
+void* dma_malloc(size_t size)
+{
+    void* ptr = &dma_heap[dma_heap_offset];
+    dma_heap_offset += size;
+    return ptr;
+}
+
+void* dma_calloc(size_t n, size_t size)
+{
+    void* ptr = dma_malloc(n * size);
+    memset(ptr, 0, n * size);
+    return ptr;
+}
+
 
 
 struct sEthernetSocket {

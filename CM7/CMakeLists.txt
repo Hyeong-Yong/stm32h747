@@ -76,30 +76,42 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # QSPI
     App/hw/include/qspi
 
+    # IEC 61850
+    App/Modules/libiec61850/config
+    App/Modules/libiec61850/hal/Inc
+    App/Modules/libiec61850/iec61850/Inc
+    App/Modules/libiec61850/sampled_values
+    App/Modules/libiec61850/Src/common/Inc
+    App/Modules/libiec61850/Src/logging
+    App/Modules/libiec61850/Src/mms/Inc
+    App/Modules/libiec61850/Src/mms/Inc_private
+    App/Modules/SV/Inc
+    
+
+    
+
     #freertos
-    App/Middlewares/FreeRTOS/Source/include
-    App/Middlewares/FreeRTOS/Source/CMSIS_RTOS_V2
-    App/Middlewares/FreeRTOS/Source/portable/GCC/ARM_CM4F
-    App/Middlewares/FreeRTOS/RTOS2/include
+    #App/Middlewares/FreeRTOS/Source/include
+    #App/Middlewares/FreeRTOS/Source/CMSIS_RTOS_V2
+    #App/Middlewares/FreeRTOS/Source/portable/GCC/ARM_CM4F
+    #App/Middlewares/FreeRTOS/RTOS2/include
 
     # LwIP
-    App/Middlewares/LwIP/src/include
-    App/Middlewares/LwIP/src/include/lwip
-    App/Middlewares/LwIP/src/include/lwip/apps
-    App/Middlewares/LwIP/src/include/lwip/priv
-    App/Middlewares/LwIP/src/include/lwip/prot
-    App/Middlewares/LwIP/src/include/netif
-    App/Middlewares/LwIP/src/include/netif/ppp
-    App/Middlewares/LwIP/src/include/compat
-    App/Middlewares/LwIP/src/include/compat/posix
-    App/Middlewares/LwIP/src/include/compat/posix/arpa
-    App/Middlewares/LwIP/src/include/compat/posix/net
-    App/Middlewares/LwIP/src/include/compat/posix/sys
-    App/Middlewares/LwIP/src/include/compat/stdc
-    App/Middlewares/LwIP/system
+    #App/Middlewares/LwIP/src/include
+    #App/Middlewares/LwIP/src/include/lwip
+    #App/Middlewares/LwIP/src/include/lwip/apps
+    #App/Middlewares/LwIP/src/include/lwip/priv
+    #App/Middlewares/LwIP/src/include/lwip/prot
+    #App/Middlewares/LwIP/src/include/netif
+    #App/Middlewares/LwIP/src/include/netif/ppp
+    #App/Middlewares/LwIP/src/include/compat
+    #App/Middlewares/LwIP/src/include/compat/posix
+    #App/Middlewares/LwIP/src/include/compat/posix/arpa
+    #App/Middlewares/LwIP/src/include/compat/posix/net
+    #App/Middlewares/LwIP/src/include/compat/posix/sys
+    #App/Middlewares/LwIP/src/include/compat/stdc
+    #App/Middlewares/LwIP/system
     
-    #ETH
-    App/hw/src/eth
 )
 
 file(GLOB SRC_FILES CONFIGURE_DEPENDS
@@ -108,9 +120,6 @@ file(GLOB SRC_FILES CONFIGURE_DEPENDS
     App/hw/*.c
     App/hw/src/*.c
     
-    # ETH
-    App/hw/src/eth/*.c
-
     # galvano
     App/hw/src/galvano/*.c
 
@@ -122,19 +131,28 @@ file(GLOB SRC_FILES CONFIGURE_DEPENDS
     App/hw/src/usb/usb_cdc/*.c
     App/Middlewares/STM32_USB_Device_Library/Src/*.c
 
+    # IEC 61850
+    App/Modules/libiec61850/hal/Src/*.c
+    App/Modules/libiec61850/sampled_values/*.c
+    App/Modules/libiec61850/Src/mms/asn1/*.c
+    App/Modules/SV/Src/*.c
+
+
+
+
     #freertos
-    App/Middlewares/FreeRTOS/Source/*.c
-    App/Middlewares/FreeRTOS/Source/portable/GCC/ARM_CM4F/*.c
-    App/Middlewares/FreeRTOS/Source/portable/MemMang/*.c
+    #App/Middlewares/FreeRTOS/Source/*.c
+    #App/Middlewares/FreeRTOS/Source/portable/GCC/ARM_CM4F/*.c
+    #App/Middlewares/FreeRTOS/Source/portable/MemMang/*.c
 
     #lwip
-    App/Middlewares/LwIP/src/core/*.c
-    App/Middlewares/LwIP/src/core/ipv4/*.c
-    App/Middlewares/LwIP/src/core/ipv6/*.c
-    App/Middlewares/LwIP/src/api/*.c
-    App/Middlewares/LwIP/src/netif/*.c
-    App/Middlewares/LwIP/src/apps/mqtt/*.c
-    App/Middlewares/LwIP/system/OS/*.c
+    #App/Middlewares/LwIP/src/core/*.c
+    #App/Middlewares/LwIP/src/core/ipv4/*.c
+    #App/Middlewares/LwIP/src/core/ipv6/*.c
+    #App/Middlewares/LwIP/src/api/*.c
+    #App/Middlewares/LwIP/src/netif/*.c
+    #App/Middlewares/LwIP/src/apps/mqtt/*.c
+    #App/Middlewares/LwIP/system/OS/*.c
 )
 
 

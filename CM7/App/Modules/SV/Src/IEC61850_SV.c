@@ -6,18 +6,25 @@
  */
 
 #include "IEC61850_SV.h"
-#include "cmsis_os.h"
-#include "stm32f4xx_hal.h"
+#include "stm32h7xx_hal.h"
+
+#include "FreeRTOS.h"
+#include "task.h"
+
 #include "semphr.h"
 
+#include "cmsis_os.h"
+
+
 // Timer for signal emulation
-extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim3;
 
 // Semaphore to emulate 50 Hz signal captured with 12800 Hz sample rate (256 samples per period)
 osSemaphoreId_t signalSemHandle;
 
+
 // Simulation of a 50 Hz sine wave captured with 12800 Hz sample rate
-float VoltageSamples[POINTS_PER_PERIOD] = { 0, 0.0245288, 0.0490428, 0.0735273, 0.0979676, 0.122349, 0.146657, 0.170876, 0.194993, 0.218992, 0.242859,
+float VoltageSamples[256] = { 0, 0.0245288, 0.0490428, 0.0735273, 0.0979676, 0.122349, 0.146657, 0.170876, 0.194993, 0.218992, 0.242859,
 		0.266581, 0.290142, 0.313528, 0.336726, 0.359721, 0.382499, 0.405048, 0.427353, 0.4494, 0.471177,
 		0.492671, 0.513868, 0.534756, 0.555322, 0.575554, 0.595439, 0.614967, 0.634124, 0.6529, 0.671282,
 		0.689261, 0.706825, 0.723964, 0.740667, 0.756924, 0.772726, 0.788063, 0.802926, 0.817305, 0.831193,
@@ -130,7 +137,7 @@ void IEC61850_SV_Task(void *argument) {
         uint16_t smpCnt = 0;
 
         // Start timer to simulate signals
-        HAL_TIM_Base_Start_IT(&htim2);
+        HAL_TIM_Base_Start_IT(&htim3);
 
         // Set synchronization status (in a real application it should be changed every time synch status changes)
 		for (uint8_t i = 0; i < ASDU_NUM; ++i) {
@@ -176,20 +183,20 @@ void IEC61850_SV_Task(void *argument) {
 				SVPublisher_publish(svPublisher);
 
         	}
-
+			
         }
 
 	}
 
 }
 
-void TIM2_IRQHandler(void)
+void TIM3_IRQHandler(void)
 {
-  /* USER CODE BEGIN TIM2_IRQn 0 */
+  /* USER CODE BEGIN TIM3_IRQn 0 */
 
-  /* USER CODE END TIM2_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim2);
-  /* USER CODE BEGIN TIM2_IRQn 1 */
+  /* USER CODE END TIM3_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim3);
+  /* USER CODE BEGIN TIM3_IRQn 1 */
 
   		// 3 phased signal
   		static uint16_t currSample[3] = {0, 85, 171};
@@ -224,5 +231,5 @@ void TIM2_IRQHandler(void)
 
   		}
 
-  /* USER CODE END TIM2_IRQn 1 */
+  /* USER CODE END TIM3_IRQn 1 */
 }

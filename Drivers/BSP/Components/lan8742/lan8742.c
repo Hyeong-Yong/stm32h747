@@ -258,7 +258,7 @@ int32_t LAN8742_StartAutoNego(lan8742_Object_t *pObj)
   */
 int32_t LAN8742_GetLinkState(lan8742_Object_t *pObj)
 {
-  volatile uint32_t readval = 0;
+  uint32_t readval = 0;
 
   /* Read Status register  */
   if(pObj->IO.ReadReg(pObj->DevAddr, LAN8742_BSR, &readval) < 0)

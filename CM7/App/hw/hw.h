@@ -33,6 +33,9 @@ extern "C" {
 #include "sdram.h"
 #include "tim.h"
 
+//#include "ethernet.h"
+//#include "ethernet_udp.h"
+
 void hwInit(void);
 
 #ifdef __cplusplus

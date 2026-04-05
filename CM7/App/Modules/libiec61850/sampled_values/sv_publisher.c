@@ -42,6 +42,14 @@
 
 #define SV_MAX_MESSAGE_SIZE 1518
 
+
+
+
+
+
+
+
+
 struct sSVPublisher_ASDU {
     const char* svID;
     const char* datset;

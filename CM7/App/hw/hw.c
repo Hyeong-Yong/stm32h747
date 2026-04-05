@@ -7,6 +7,7 @@
 
 
 #include "hw.h"
+#include "ethernet_udp.h"
 
 
 void hwInit(void)
@@ -29,6 +30,9 @@ void hwInit(void)
   usbBegin(USB_CDC_MODE);
   uartOpen(_DEF_UART2, 115200);
 
+  //etnetInit();
+  //etnetUdpInit();
+  
 
   logPrintf("\r\n[ Firmware Begin... ]\r\n");
   logPrintf("Booting..Clock\t: %d Mhz\r\n", (int)HAL_RCC_GetSysClockFreq()/1000000);

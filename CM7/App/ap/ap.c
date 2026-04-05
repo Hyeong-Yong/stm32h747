@@ -11,7 +11,6 @@
 #include "ap.h"
 #include "cmsis_os.h"
 
-
 void apInit(void)
 {
   cliOpen(_DEF_UART1, 115200);
