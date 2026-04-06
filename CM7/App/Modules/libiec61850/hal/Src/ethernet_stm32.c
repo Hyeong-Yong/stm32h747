@@ -77,12 +77,37 @@ void Ethernet_destroySocket(EthernetSocket ethSocket)
 
 void Ethernet_sendPacket(EthernetSocket ethSocket, uint8_t* buffer, int packetSize)
 {
-	struct pbuf bufToSend;
-	bufToSend.next = NULL;
-	bufToSend.payload = (void *)buffer;
-	bufToSend.tot_len = packetSize;
-	bufToSend.len = packetSize;
-	bufToSend.flags = 117;
-	ethSocket->netif->linkoutput(ethSocket->netif, &bufToSend);
+
+
+	// struct pbuf bufToSend;
+	// bufToSend.next = NULL;
+	// bufToSend.payload = (void *)buffer;
+	// bufToSend.tot_len = packetSize;
+	// bufToSend.len = packetSize;
+	// bufToSend.flags = 117;
+	// ethSocket->netif->linkoutput(ethSocket->netif, &bufToSend);
+
+	struct pbuf* bufToSend = pbuf_alloc(PBUF_RAW, (u16_t)packetSize, PBUF_RAM);
+	if (bufToSend == NULL)
+    	return;
+
+    /* 조립된 raw Ethernet frame을 pbuf payload로 복사 */
+    err_t err = pbuf_take(bufToSend, buffer, (u16_t)packetSize);
+    if (err != ERR_OK) {
+        pbuf_free(bufToSend);
+        return;
+    }
+
+    /* 송신 */
+    err = ethSocket->netif->linkoutput(ethSocket->netif, bufToSend);
+    if (err != ERR_OK) {
+        pbuf_free(bufToSend);
+        return;
+    }
+
+      /*
+      성공 시에는 STM32 ETH 드라이버의 TX 완료 경로에서
+      pbuf_free()가 호출됩니다.
+      */
 
 }
