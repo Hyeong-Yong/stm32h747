@@ -9,25 +9,35 @@
 #include "stm32h7xx_hal.h"				// Include hal header for your STM32 MCU
 #include "lwip.h"
 
- // DMA malloc for lwip, not creating memory in the DTCM
-__attribute__((section(".lwip_sec"))) static uint8_t dma_heap[4 * 1024];
+#define SV_HEAP_SIZE   (48 * 1024)
 
-static size_t dma_heap_offset = 0;
+__attribute__((section(".sv_heap"), aligned(32)))
+static uint8_t sv_heap[SV_HEAP_SIZE];
 
-void* dma_malloc(size_t size)
+static size_t sv_heap_offset = 0;
+
+void* sv_malloc(size_t size)
 {
-    void* ptr = &dma_heap[dma_heap_offset];
-    dma_heap_offset += size;
+    size = (size + 31U) & ~31U;
+
+    if ((sv_heap_offset + size) > SV_HEAP_SIZE)
+        return NULL;
+
+    void* ptr = &sv_heap[sv_heap_offset];
+    sv_heap_offset += size;
     return ptr;
 }
 
-void* dma_calloc(size_t n, size_t size)
+void* sv_calloc(size_t n, size_t size)
 {
-    void* ptr = dma_malloc(n * size);
-    memset(ptr, 0, n * size);
+    size_t total = n * size;
+    void* ptr = sv_malloc(total);
+
+    if (ptr)
+        memset(ptr, 0, total);
+
     return ptr;
 }
-
 
 
 struct sEthernetSocket {
@@ -38,8 +48,8 @@ struct sEthernetSocket {
 
 void Ethernet_getInterfaceMACAddress(const char* interfaceId, uint8_t* addr)
 {
-
-	struct netif * netif = netif_find(interfaceId);
+	struct netif * netif;
+	netif = netif_find(interfaceId);
 	for (int i = 0; i < 6; ++i) {
 		addr[i] = netif->hwaddr[i];
 	}
@@ -49,8 +59,8 @@ void Ethernet_getInterfaceMACAddress(const char* interfaceId, uint8_t* addr)
 
 EthernetSocket Ethernet_createSocket(const char* interfaceId, uint8_t* destAddress)
 {
+	EthernetSocket ethernetSocket = (EthernetSocket) sv_calloc(1, sizeof(struct sEthernetSocket));
 
-	EthernetSocket ethernetSocket = (EthernetSocket) calloc(1, sizeof(struct sEthernetSocket));
 	ethernetSocket->netif = netif_find(interfaceId);
 	ethernetSocket->destAddress = destAddress;
 	return ethernetSocket;

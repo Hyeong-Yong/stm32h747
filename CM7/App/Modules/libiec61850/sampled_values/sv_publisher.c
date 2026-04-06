@@ -43,8 +43,8 @@
 #define SV_MAX_MESSAGE_SIZE 1518
 
 
-
-
+extern void* sv_malloc(size_t size);
+extern void* sv_calloc(size_t n, size_t size);
 
 
 
@@ -103,10 +103,13 @@ preparePacketBuffer(SVPublisher self, CommParameters* parameters, const char* in
 
     uint8_t srcAddr[6];
 
-    if (interfaceId != NULL)
+    if (interfaceId != NULL){
         Ethernet_getInterfaceMACAddress(interfaceId, srcAddr);
-    else
+    }
+    else{
         Ethernet_getInterfaceMACAddress(CONFIG_ETHERNET_INTERFACE_ID, srcAddr);
+
+}
 
     if (parameters == NULL) {
         dstAddr = defaultDstAddr;
@@ -134,7 +137,8 @@ preparePacketBuffer(SVPublisher self, CommParameters* parameters, const char* in
         return false;
     }
 
-    self->buffer = (uint8_t*) GLOBAL_MALLOC(SV_MAX_MESSAGE_SIZE);
+    //self->buffer = (uint8_t*) GLOBAL_MALLOC(SV_MAX_MESSAGE_SIZE);
+      self->buffer = (uint8_t*) sv_malloc(SV_MAX_MESSAGE_SIZE);
 
     if (self->buffer) {
         memcpy(self->buffer, dstAddr, 6);
@@ -275,7 +279,7 @@ encodeInt64FixedSize(int64_t value, uint8_t* buffer, int bufPos)
 SVPublisher
 SVPublisher_createEx(CommParameters* parameters, const char* interfaceId, bool useVlanTag)
 {
-    SVPublisher self = (SVPublisher) GLOBAL_CALLOC(1, sizeof(struct sSVPublisher));
+    SVPublisher self = (SVPublisher) sv_calloc(1, sizeof(struct sSVPublisher));
 
     if (self) {
         self->asduList = NULL;
@@ -299,7 +303,7 @@ SVPublisher_create(CommParameters* parameters, const char* interfaceId)
 SVPublisher_ASDU
 SVPublisher_addASDU(SVPublisher self, const char* svID, const char* datset, uint32_t confRev)
 {
-    SVPublisher_ASDU newAsdu = (SVPublisher_ASDU) GLOBAL_CALLOC(1, sizeof(struct sSVPublisher_ASDU));
+    SVPublisher_ASDU newAsdu = (SVPublisher_ASDU) sv_calloc(1, sizeof(struct sSVPublisher_ASDU));
 
     newAsdu->svID = svID;
     newAsdu->datset = datset;

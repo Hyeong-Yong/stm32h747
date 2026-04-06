@@ -14,7 +14,7 @@
 #include "semphr.h"
 
 #include "cmsis_os.h"
-
+#include "stack_config.h"
 
 // Timer for signal emulation
 extern TIM_HandleTypeDef htim3;
@@ -77,7 +77,7 @@ void IEC61850_SV_Task(void *argument) {
 	signalSemHandle = osSemaphoreNew(1, 0, &signalSem_attr);
 
 	// Ethernet interface name in LWIP for STM32
-	char* interface = "st";
+	char* interface = "st0";
 
 	// Destination MAC address
 	uint8_t macAddr[6] = {0x01, 0x0C, 0xCD, 0x04, 0x00, 0x01};

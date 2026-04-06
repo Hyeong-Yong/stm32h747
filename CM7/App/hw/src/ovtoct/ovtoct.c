@@ -143,7 +143,7 @@ void ovt_Acquire()
         }
            #ifdef _USE_FREERTOS
               osDelay(1);
-              #endif
+           #endif
     }
 }
 

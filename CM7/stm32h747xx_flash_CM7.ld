@@ -202,14 +202,28 @@ SECTIONS
   .lwip_sec (NOLOAD) :
   {
     . = ABSOLUTE(0x30000000);
-    *(.RxDecripSection) 
+    *(.RxDescripSection) 
     
     . = ABSOLUTE(0x30000100);
-    *(.TxDecripSection)
+    *(.TxDescripSection)
     
     . = ABSOLUTE(0x30000200);
     *(.Rx_PoolSection)  
   } >RAM1
+
+
+  /* iec61850_buffer section, used for the sampled values buffer. */
+  .sv_heap (NOLOAD) :
+  {
+    . = ABSOLUTE(0x3000C600);
+    . = ALIGN(32);
+    _sv_heap_start = .;
+    *(.sv_heap)
+    *(.sv_heap*)
+    . = ALIGN(32);
+    _sv_heap_end = .;
+  } >RAM1
+
 
   .sdram_data (NOLOAD) :
   {
