@@ -11,9 +11,7 @@
 
 #define SV_HEAP_SIZE   (48 * 1024)
 
-__attribute__((section(".sv_heap"), aligned(32)))
-static uint8_t sv_heap[SV_HEAP_SIZE];
-
+__attribute__((section(".sv_heap"), aligned(32))) static uint8_t sv_heap[SV_HEAP_SIZE];
 static size_t sv_heap_offset = 0;
 
 void* sv_malloc(size_t size)
@@ -27,7 +25,6 @@ void* sv_malloc(size_t size)
     sv_heap_offset += size;
     return ptr;
 }
-
 void* sv_calloc(size_t n, size_t size)
 {
     size_t total = n * size;
@@ -39,12 +36,10 @@ void* sv_calloc(size_t n, size_t size)
     return ptr;
 }
 
-
 struct sEthernetSocket {
 	struct netif * netif;
 	uint8_t* destAddress;
 };
-
 
 void Ethernet_getInterfaceMACAddress(const char* interfaceId, uint8_t* addr)
 {
@@ -53,9 +48,7 @@ void Ethernet_getInterfaceMACAddress(const char* interfaceId, uint8_t* addr)
 	for (int i = 0; i < 6; ++i) {
 		addr[i] = netif->hwaddr[i];
 	}
-
 }
-
 
 EthernetSocket Ethernet_createSocket(const char* interfaceId, uint8_t* destAddress)
 {
@@ -64,29 +57,15 @@ EthernetSocket Ethernet_createSocket(const char* interfaceId, uint8_t* destAddre
 	ethernetSocket->netif = netif_find(interfaceId);
 	ethernetSocket->destAddress = destAddress;
 	return ethernetSocket;
-
 }
-
 
 void Ethernet_destroySocket(EthernetSocket ethSocket)
 {
-
 	free(ethSocket);
-
 }
 
 void Ethernet_sendPacket(EthernetSocket ethSocket, uint8_t* buffer, int packetSize)
 {
-
-
-	// struct pbuf bufToSend;
-	// bufToSend.next = NULL;
-	// bufToSend.payload = (void *)buffer;
-	// bufToSend.tot_len = packetSize;
-	// bufToSend.len = packetSize;
-	// bufToSend.flags = 117;
-	// ethSocket->netif->linkoutput(ethSocket->netif, &bufToSend);
-
 	struct pbuf* bufToSend = pbuf_alloc(PBUF_RAW, (u16_t)packetSize, PBUF_RAM);
 	if (bufToSend == NULL)
     	return;
@@ -99,15 +78,13 @@ void Ethernet_sendPacket(EthernetSocket ethSocket, uint8_t* buffer, int packetSi
     }
 
     /* 송신 */
-    err = ethSocket->netif->linkoutput(ethSocket->netif, bufToSend);
+    err = ethSocket->netif->linkoutput(ethSocket->netif, bufToSend);    
     if (err != ERR_OK) {
         pbuf_free(bufToSend);
+        printf("Ethernet_sendPacket: Failed to send packet, error code: %d\n", err);
         return;
     }
 
-      /*
-      성공 시에는 STM32 ETH 드라이버의 TX 완료 경로에서
-      pbuf_free()가 호출됩니다.
-      */
-
+    /* 메모리 해제 */
+    pbuf_free(bufToSend);
 }
