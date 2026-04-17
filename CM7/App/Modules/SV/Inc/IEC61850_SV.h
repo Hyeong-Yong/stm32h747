@@ -21,12 +21,12 @@
 #define SV_SMPSYNCH_NONE 0
 
 // ASDUs quantity in one SV frame
-#define ASDU_NUM 8
+#define ASDU_NUM 80
 
 // Points per signal period
-#define POINTS_PER_PERIOD 256
+#define POINTS_PER_PERIOD 90
 // Captured signal frequency
-#define SIGNAL_FREQ 50
+#define SIGNAL_FREQ 60
 
 // ASDU information structure
 // Edit implementation if you need other data in ASDU

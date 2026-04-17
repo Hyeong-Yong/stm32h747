@@ -5,6 +5,10 @@
 #include "cli.h"
 
 
+#include "FreeRTOS.h"
+#include "semphr.h"
+#include "cmsis_os.h"
+
 
 typedef struct
 {
@@ -49,9 +53,11 @@ typedef struct
 
  //static __attribute__((section(".non_cache")))    ALIGN_32BYTES(__IO uint32_t adcBuf_OVT[ADC_BUF_SIZE]);
 
+
+
  __attribute__((section(".non_cache")))    __IO uint32_t adcBuf_OVT[ADC_BUF_SIZE];
  __attribute__((section(".non_cache")))    __IO uint16_t adcBuf_OCT[ADC_BUF_SIZE];
- __attribute__((section(".non_cache")))    __IO uint16_t adcBuf_3[ADC_BUF_SIZE];
+ __attribute__((section(".non_cache")))    __IO uint16_t adcBuf_3[160];
 
 
 
@@ -131,30 +137,38 @@ bool adcOctMeasure(void){
  }
  
 
-bool adc3Measure(void){
-     bool ret = true;
-     if (HAL_ADC_Start_DMA(&hadc3, (uint32_t*)adcBuf_3, ADC_BUF_SIZE) != HAL_OK){
-         ret = false;
-         logPrintf("ADC_Start_DMA failed\n");
-     }
- 
-     return ret;
- }
- 
 
+extern __IO uint16_t* activeAdcPtr;
+extern osSemaphoreId_t signalSemHandle;
 #define _USE_ADC_TEST
 #ifdef _USE_ADC_TEST 
+
+// 버퍼의 절반이 찼을 때 호출 (0 ~ 1023)
+void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* AdcHandle) {
+    if (AdcHandle->Instance == ADC3) {
+        activeAdcPtr = &adcBuf_3[0]; // 전반부 버퍼 준비 완료
+        static BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+        xSemaphoreGiveFromISR(signalSemHandle, &xHigherPriorityTaskWoken);
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    }
+}
+
   void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *AdcHandle) {
       if ( AdcHandle->Instance == ADC1){
           adc_OVT_Finished = true;
       }
       else if ( AdcHandle->Instance == ADC2){
           adc_OCT_Finished = true;
-      }
-      else if ( AdcHandle->Instance == ADC3){
-          adc_3_Finished = true;
-      }
+      }    
+      else if (AdcHandle->Instance == ADC3) {
+        activeAdcPtr = &adcBuf_3[ADC_BUF_SIZE / 2]; // 후반부 버퍼 준비 완료
+        static BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+        xSemaphoreGiveFromISR(signalSemHandle, &xHigherPriorityTaskWoken);
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    }
   }
+
+
 
 #endif
 

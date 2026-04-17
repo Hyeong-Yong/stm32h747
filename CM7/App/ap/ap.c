@@ -10,6 +10,7 @@
 
 #include "ap.h"
 #include "cmsis_os.h"
+#include "sv_publisher.h"
 
 void apInit(void)
 {
@@ -38,7 +39,6 @@ void apMain(void)
 
     }
     ovtOct_GUI_Run();
-    
     
 
    cliMain();
