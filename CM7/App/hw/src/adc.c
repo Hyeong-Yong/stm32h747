@@ -148,8 +148,6 @@ bool adc3Measure(void){
      return ret;
  }
  
-extern osSemaphoreId_t signalSemHandle;
-extern uint16_t CurA[ASDU_NUM];
 extern osMessageQueueId_t svDataQueueHandle;
 #define _USE_ADC_TEST
 #ifdef _USE_ADC_TEST 
@@ -161,16 +159,7 @@ extern osMessageQueueId_t svDataQueueHandle;
           adc_OCT_Finished = true;
       }
       else if (AdcHandle->Instance == ADC3) {
-        osMessageQueuePut(svDataQueueHandle, &adcBuf_3, 0, 0);
-        // memcpy((void*)CurA, (void*)adcBuf_3, ASDU_NUM * sizeof(uint16_t));
-        
-        //   			// Give semaphore to SV task
-  		// 	static BaseType_t xHigherPriorityTaskWoken;
-  		// 	xHigherPriorityTaskWoken = pdFALSE;
-
-  		// 	xSemaphoreGiveFromISR(signalSemHandle, &xHigherPriorityTaskWoken);
-  		// 	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-
+        osMessageQueuePut(svDataQueueHandle, (void*)(uint16_t*)&adcBuf_3, 0, 0);
 
     }
   }

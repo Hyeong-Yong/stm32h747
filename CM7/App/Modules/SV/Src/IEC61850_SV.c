@@ -39,7 +39,7 @@ char svId[8][12] = {"OCT_DATA_1\0", "OCT_DATA_2\0", "OCT_DATA_3\0", "NONE\0",
 void IEC61850_SV_Task(void *argument) {
   	/* Create the queue(s) */
   	/* creation of svDataQueue */
-  	svDataQueueHandle = osMessageQueueNew (5, ASDU_NUM *sizeof(uint16_t), &svDataQueue_attributes);
+  	svDataQueueHandle = osMessageQueueNew (16, ASDU_NUM *sizeof(uint16_t), &svDataQueue_attributes);
 
 	// Ethernet interface name in LWIP for STM32
 	char* interface = "st0";
