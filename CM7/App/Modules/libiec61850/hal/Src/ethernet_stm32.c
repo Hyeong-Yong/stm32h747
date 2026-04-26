@@ -64,24 +64,40 @@ void Ethernet_destroySocket(EthernetSocket ethSocket)
 	free(ethSocket);
 }
 
+__IO static struct pbuf bufToSend;
+
 void Ethernet_sendPacket(EthernetSocket ethSocket, uint8_t* buffer, int packetSize)
 {
+  
+	// bufToSend.next = NULL;
+	// bufToSend.payload = (void *)buffer;
+	// bufToSend.tot_len = packetSize;
+	// bufToSend.len = packetSize;
+	// bufToSend.flags = 117;
+	// ethSocket->netif->linkoutput(ethSocket->netif, &bufToSend);
+
+
+
 	struct pbuf* bufToSend = pbuf_alloc(PBUF_RAW, (u16_t)packetSize, PBUF_RAM);
 	if (bufToSend == NULL)
     	return;
-
+    
+    SCB_CleanDCache_by_Addr((uint32_t*)bufToSend->payload, packetSize);
+    
     /* 조립된 raw Ethernet frame을 pbuf payload로 복사 */
     err_t err = pbuf_take(bufToSend, buffer, (u16_t)packetSize);
     if (err != ERR_OK) {
         pbuf_free(bufToSend);
         return;
     }
-
     /* 송신 */
     err = ethSocket->netif->linkoutput(ethSocket->netif, bufToSend);    
     if (err != ERR_OK) {
         pbuf_free(bufToSend);
         printf("Ethernet_sendPacket: Failed to send packet, error code: %d\n", err);
+        if (!netif_is_link_up(ethSocket->netif)) {
+              printf("link down\n");  // 물리적 링크가 설정되지 않음 (예: 케이블 미연결)
+            }
         return;
     }
 

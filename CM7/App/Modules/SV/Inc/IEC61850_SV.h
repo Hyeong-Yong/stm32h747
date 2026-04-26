@@ -10,7 +10,7 @@
 
 #include "sv_publisher.h"
 
-//SV frame parameters defines
+// SV frame parameters defines
 #define CONFIG_SV_CUSTOM_PRIORITY 4
 #define CONFIG_SV_CUSTOM_VLAN_ID 0
 #define CONFIG_SV_CUSTOM_APPID 0x4000
@@ -26,33 +26,32 @@
 // Points per signal period
 #define POINTS_PER_PERIOD 256
 // Captured signal frequency
-#define SIGNAL_FREQ 50
+#define SIGNAL_FREQ 60
 
 // ASDU information structure
 // Edit implementation if you need other data in ASDU
 // According to IEC61850-9-2 Implementation guideline each ASDU
 // Contains 4 currents with quality info (validity, test flag etc.) and 4 voltages with quality info
-typedef struct asduInfStruct {
-	  SVPublisher_ASDU asdu;
-	  int CurrentA;
-	  int CurrA_Q;
-	  int CurrentB;
-	  int CurrB_Q;
-	  int CurrentC;
-	  int CurrC_Q;
-	  int CurrentN;
-	  int CurrN_Q;
-	  int VoltageA;
-	  int VoltA_Q;
-	  int VoltageB;
-	  int VoltB_Q;
-	  int VoltageC;
-	  int VoltC_Q;
-	  int VoltageN;
-	  int VoltN_Q;
+typedef struct asduInfStruct
+{
+	SVPublisher_ASDU asdu;
+	int CurrentA;
+	int CurrA_Q;
+	int CurrentB;
+	int CurrB_Q;
+	int CurrentC;
+	int CurrC_Q;
+	int CurrentN;
+	int CurrN_Q;
+	int VoltageA;
+	int VoltA_Q;
+	int VoltageB;
+	int VoltB_Q;
+	int VoltageC;
+	int VoltC_Q;
+	int VoltageN;
+	int VoltN_Q;
 } ASDU_Inf;
-
-
 
 // SV frame assembling and publishing task
 void IEC61850_SV_Task(void *argument);

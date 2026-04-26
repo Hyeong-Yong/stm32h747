@@ -1,8 +1,15 @@
 #include "adc.h"
+#include "IEC61850_SV.h"
 
 
 #ifdef _USE_HW_ADC     
 #include "cli.h"
+
+
+
+#include "FreeRTOS.h"
+#include "semphr.h"
+#include "cmsis_os.h"
 
 
 
@@ -44,14 +51,14 @@ typedef struct
  
 
 
- /* ADC parameters */
+ /* ADC parameters */ 
  static bool is_init = false;
 
  //static __attribute__((section(".non_cache")))    ALIGN_32BYTES(__IO uint32_t adcBuf_OVT[ADC_BUF_SIZE]);
 
  __attribute__((section(".non_cache")))    __IO uint32_t adcBuf_OVT[ADC_BUF_SIZE];
  __attribute__((section(".non_cache")))    __IO uint16_t adcBuf_OCT[ADC_BUF_SIZE];
- __attribute__((section(".non_cache")))    __IO uint16_t adcBuf_3[ADC_BUF_SIZE];
+ __attribute__((section(".non_cache")))    __IO uint16_t adcBuf_3[ASDU_NUM];
 
 
 
@@ -88,7 +95,7 @@ typedef struct
      if ( HAL_ADCEx_Calibration_Start(&hadc3, ADC_CALIB_OFFSET_LINEARITY, ADC_SINGLE_ENDED) != HAL_OK) {
          ret = false;
      }
-     if (HAL_ADC_Start_DMA(&hadc3, (uint32_t*)adcBuf_3, ADC_BUF_SIZE) != HAL_OK) {
+     if (HAL_ADC_Start_DMA(&hadc3, (uint32_t*)adcBuf_3, ASDU_NUM) != HAL_OK) {
          ret = false;
      }
      
@@ -133,7 +140,7 @@ bool adcOctMeasure(void){
 
 bool adc3Measure(void){
      bool ret = true;
-     if (HAL_ADC_Start_DMA(&hadc3, (uint32_t*)adcBuf_3, ADC_BUF_SIZE) != HAL_OK){
+     if (HAL_ADC_Start_DMA(&hadc3, (uint32_t*)adcBuf_3, ASDU_NUM) != HAL_OK){
          ret = false;
          logPrintf("ADC_Start_DMA failed\n");
      }
@@ -141,7 +148,9 @@ bool adc3Measure(void){
      return ret;
  }
  
-
+extern osSemaphoreId_t signalSemHandle;
+extern uint16_t CurA[ASDU_NUM];
+extern osMessageQueueId_t svDataQueueHandle;
 #define _USE_ADC_TEST
 #ifdef _USE_ADC_TEST 
   void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *AdcHandle) {
@@ -151,9 +160,19 @@ bool adc3Measure(void){
       else if ( AdcHandle->Instance == ADC2){
           adc_OCT_Finished = true;
       }
-      else if ( AdcHandle->Instance == ADC3){
-          adc_3_Finished = true;
-      }
+      else if (AdcHandle->Instance == ADC3) {
+        osMessageQueuePut(svDataQueueHandle, &adcBuf_3, 0, 0);
+        // memcpy((void*)CurA, (void*)adcBuf_3, ASDU_NUM * sizeof(uint16_t));
+        
+        //   			// Give semaphore to SV task
+  		// 	static BaseType_t xHigherPriorityTaskWoken;
+  		// 	xHigherPriorityTaskWoken = pdFALSE;
+
+  		// 	xSemaphoreGiveFromISR(signalSemHandle, &xHigherPriorityTaskWoken);
+  		// 	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+
+
+    }
   }
 
 #endif
@@ -196,15 +215,15 @@ bool adc3Measure(void){
      }
 
      if (args->argc == 1 && args->isStr(0, "adc_3") == true) {
-        HAL_ADC_Start_DMA(&hadc3, (uint32_t*)adcBuf_3, ADC_BUF_SIZE);
+        HAL_ADC_Start_DMA(&hadc3, (uint32_t*)adcBuf_3, ASDU_NUM);
          while (cliKeepLoop()) {
              if (adc_3_Finished == true) {
                 adc_3_Finished = false;
-                 for (i = 0; i < ADC_BUF_SIZE; i++) {
+                 for (i = 0; i < ASDU_NUM; i++) {
                      cliPrintf("%4.2f [mV]\n", ((float)adcBuf_3[i]/65535)*3.3); // LSB-> Master, 16bit => 65535
                  }
                  cliPrintf("-------------------------\n");
-                 HAL_ADC_Start_DMA(&hadc3, (uint32_t*)adcBuf_3, ADC_BUF_SIZE);
+                 HAL_ADC_Start_DMA(&hadc3, (uint32_t*)adcBuf_3, ASDU_NUM);
              }
              delay(1500);
          }
