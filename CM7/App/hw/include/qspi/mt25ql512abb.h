@@ -29,6 +29,9 @@
 #include "mt25ql512abb_conf.h"
 
 
+
+#ifdef _USE_HW_QSPI
+
 /** @addtogroup BSP
   * @{
   */
@@ -373,6 +376,7 @@ int32_t MT25QL512ABB_ReadFlagStatusRegister(QSPI_HandleTypeDef *Ctx, MT25QL512AB
 #ifdef __cplusplus
 }
 #endif
+#endif /* _USE_HW_QSPI */
 
 #endif /* MT25QL512ABB_H */
 

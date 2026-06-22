@@ -15,6 +15,7 @@
 
 
 
+#ifdef _USE_HW_QSPI
 
 
 /* QSPI Error codes */
@@ -968,3 +969,5 @@ static uint8_t QSPI_WriteStatus(QSPI_HandleTypeDef *hqspi, uint8_t cmd, uint8_t 
 
   return QSPI_OK;
 }
+
+#endif
