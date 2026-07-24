@@ -1,11 +1,3 @@
-/*
- * ap.cpp
- *
- *  Created on: Apr 19, 2021
- *      Author: baram
- */
-
-
 
 
 #include "ap.h"
@@ -13,11 +5,11 @@
 
 void apInit(void)
 {
-  cliOpen(_DEF_UART1, 115200);
+  cliOpen(_DEF_UART2, 115200);
   cliLogo();
-  ovtOct_init();
+  //ovtOct_init();
 
-  galvanoInit();
+  //galvanoInit();
   //dac8562_init();
   timStart();
 }
@@ -37,7 +29,7 @@ void apMain(void)
       ledToggle(_DEF_LED1);
 
     }
-    ovtOct_GUI_Run();
+    //ovtOct_GUI_Run();
     
     
 

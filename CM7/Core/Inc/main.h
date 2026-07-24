@@ -63,8 +63,6 @@ void Error_Handler(void);
 #define DAC8562_SPI_SYNC_GPIO_Port GPIOC
 #define LED1_Pin GPIO_PIN_12
 #define LED1_GPIO_Port GPIOI
-#define LED2_Pin GPIO_PIN_13
-#define LED2_GPIO_Port GPIOI
 #define LED3_Pin GPIO_PIN_14
 #define LED3_GPIO_Port GPIOI
 

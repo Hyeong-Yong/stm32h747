@@ -45,7 +45,7 @@
 #define      HW_GPIO_MAX_CH         1
 
 #define _USE_HW_FLASH
-#define _USE_HW_QSPI
+//#define _USE_HW_QSPI
 
 #define _USE_HW_SPI
 #define      HW_SPI_MAX_CH			1
