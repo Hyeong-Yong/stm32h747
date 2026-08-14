@@ -15,6 +15,8 @@ extern "C" {
 #include "hw_def.h"
 
 #include "adc.h"
+#include "oct_calib.h"
+#include "oct_realTimeCalculate.h"
 
 #include "led.h"
 #include "gpio.h"

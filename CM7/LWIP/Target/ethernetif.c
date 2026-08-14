@@ -20,6 +20,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "hw_def.h"   // logPrintf(=printf) 매크로 사용을 위해 추가
 #include "lwip/opt.h"
 #include "lwip/timeouts.h"
 #include "netif/ethernet.h"
@@ -346,7 +347,11 @@ static void low_level_init(struct netif *netif)
     netif_set_up(netif);
     netif_set_link_up(netif);
 /* USER CODE BEGIN PHY_POST_CONFIG */
-
+    // SV 스트림(약 11.9Mbps 필요)이 링크 용량을 실제로 감당하는지 확인하기 위해
+    // 협상된 속도/듀플렉스를 그대로 로그로 남긴다.
+    logPrintf("[ETH] link up: %s %s\r\n",
+              (speed == ETH_SPEED_100M) ? "100Mbps" : "10Mbps",
+              (duplex == ETH_FULLDUPLEX_MODE) ? "Full-Duplex" : "Half-Duplex");
 /* USER CODE END PHY_POST_CONFIG */
     }
 
@@ -853,6 +858,11 @@ void ethernet_link_thread(void* argument)
       HAL_ETH_Start_IT(&heth);
       netif_set_up(netif);
       netif_set_link_up(netif);
+
+      // 재연결/재협상 시에도 실제 협상된 속도/듀플렉스를 남긴다.
+      logPrintf("[ETH] link up: %s %s\r\n",
+                (speed == ETH_SPEED_100M) ? "100Mbps" : "10Mbps",
+                (duplex == ETH_FULLDUPLEX_MODE) ? "Full-Duplex" : "Half-Duplex");
     }
   }
 

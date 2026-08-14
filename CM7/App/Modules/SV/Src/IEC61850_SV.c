@@ -33,13 +33,16 @@ const osMessageQueueAttr_t svDataQueue_attributes = {
 SVPublisher svPublisher;
 
 // SVIds (ASDU_NUM = 8 기준)
-char svId[8][12] = {"OCT_DATA_1\0", "OCT_DATA_2\0", "OCT_DATA_3\0", "NONE\0",
-                    "OVT_DATA_1\0", "OVT_DATA_2\0", "OVT_DATA_3\0", "NONE\0"};
+char svId[8][12] = {"OCT_Ia\0", "OCT_Ib\0", "OCT_Ic\0", "NONE\0",
+                    "OVT_Va\0", "OVT_Vb\0", "OVT_Vc\0", "NONE\0"};
 
 // SV frame assembling and publishing task
 void IEC61850_SV_Task(void *argument) {
-    /* 기존 큐 생성을 새로운 패킷 크기(AdcDataPacket)에 맞추어 할당 */
-    svDataQueueHandle = osMessageQueueNew (16, sizeof(AdcDataPacket), &svDataQueue_attributes);
+    /* 기존 큐 생성을 새로운 패킷 크기(AdcDataPacket)에 맞추어 할당.
+     * 깊이 16(≈8.3ms 버퍼) → 64(≈33.3ms 버퍼)로 확장: 이더넷 TX가 순간적으로
+     * 막혀도(디스크립터 부족 등) 드롭 대신 지연으로 흡수할 여유를 늘린다.
+     * sizeof(AdcDataPacket)=160B 기준 64개 = 10.24KB, RAM 여유상 문제없음. */
+    svDataQueueHandle = osMessageQueueNew (64, sizeof(AdcDataPacket), &svDataQueue_attributes);
 
     // Ethernet interface name in LWIP for STM32
     char* interface = "st0";
@@ -122,22 +125,16 @@ void IEC61850_SV_Task(void *argument) {
                 // 1. 신호 처리 프로세스 (평균화 연산 및 전압/전류 물리값 변환 연산 통합)
 for (uint8_t i = 0; i < ASDU_NUM; ++i) {
     // ADC1: 같은 순간(i)의 3채널(ch0, ch1, ch16) 평균
-    uint32_t sumA = localPacket.adc1[i*3 + 0]
-                  + localPacket.adc1[i*3 + 1]
-                  + localPacket.adc1[i*3 + 2];
-    octA[i] = ((float)sumA / 3.0f) * 3.3f / 65535.0f;
+    //uint32_t sumA = localPacket.adc1[i*3 + 0]+ localPacket.adc1[i*3 + 1]+ localPacket.adc1[i*3 + 2];
+    octA[i] = ((float)localPacket.adc1[i*3 + 0] / 3.0f) * 3.3f / 65535.0f;
 
     // ADC2: 같은 순간(i)의 3채널(ch3, ch12, ch13) 평균
-    uint32_t sumB = localPacket.adc2[i*3 + 0]
-                  + localPacket.adc2[i*3 + 1]
-                  + localPacket.adc2[i*3 + 2];
-    octB[i] = ((float)sumB / 3.0f) * 3.3f / 65535.0f;
+    //uint32_t sumB = localPacket.adc2[i*3 + 0]+ localPacket.adc2[i*3 + 1]+ localPacket.adc2[i*3 + 2];
+    octB[i] = ((float)localPacket.adc1[i*3 + 1] / 3.0f) * 3.3f / 65535.0f;
 
     // ADC3: 같은 순간(i)의 1~3채널(ch2, ch6, ch7) 평균
-    uint32_t sumC = localPacket.adc3[i*4 + 0]
-                  + localPacket.adc3[i*4 + 1]
-                  + localPacket.adc3[i*4 + 2];
-    octC[i] = ((float)sumC / 3.0f) * 3.3f / 65535.0f;
+    //uint32_t sumC = localPacket.adc3[i*4 + 0]+ localPacket.adc3[i*4 + 1]+ localPacket.adc3[i*4 + 2];
+    octC[i] = ((float)localPacket.adc1[i*3 + 2] / 3.0f) * 3.3f / 65535.0f;
 
     // ADC3: 같은 순간(i)의 4채널(ch8)은 평균 없이 그대로 전송
     ovtA[i] = ((float)localPacket.adc3[i*4 + 3]) * 3.3f / 65535.0f;

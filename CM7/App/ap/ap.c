@@ -7,9 +7,12 @@ void apInit(void)
 {
   cliOpen(_DEF_UART2, 115200);
   cliLogo();
+  
+
+  //USB-MODE
   //ovtOct_init();
 
-  //galvanoInit();
+  galvanoInit();
   //dac8562_init();
   timStart();
 }
@@ -29,7 +32,9 @@ void apMain(void)
       ledToggle(_DEF_LED1);
 
     }
-    //ovtOct_GUI_Run();
+
+    //USB-MODE
+   //ovtOct_GUI_Run();
     
     
 

@@ -24,12 +24,14 @@ void hwInit(void)
   spiInit();
   spiBegin(_DEF_SPI1);
   adcInit();
+  octCalibInit();
+  octRealTimeInit();
   cdcInit();
   usbInit();
   timInit();
   usbBegin(USB_CDC_MODE);
   uartOpen(_DEF_UART2, 115200);
-
+  
   //etnetInit();
   //etnetUdpInit();
   

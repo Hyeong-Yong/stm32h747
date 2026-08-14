@@ -2,5 +2,6 @@
   "device": "STM32H747XIH6",
   "core": "Cortex-M7",
   "order": 0,
-  "toolchain": "GCC"
+  "toolchain": "GCC",
+  "pname": "CM7"
 }

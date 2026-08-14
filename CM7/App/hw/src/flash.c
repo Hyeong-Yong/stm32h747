@@ -13,7 +13,8 @@
 #include "cli.h"
 
 
-#define FLASH_MAX_SECTOR          1
+#define FLASH_MAX_SECTOR          8
+#define FLASH_SECTOR_SIZE                     (128*1024)
 #define FLASH_INTERNAL_SIZE                  (1024*1024)
 
 typedef struct
@@ -27,7 +28,14 @@ typedef struct
 
 const flash_tbl_t flash_tbl_bank1[FLASH_MAX_SECTOR] =
     {
-        {0, FLASH_BANK_1, 0x08000000, FLASH_INTERNAL_SIZE},
+        {0, FLASH_BANK_1, 0x08000000 + 0*FLASH_SECTOR_SIZE, FLASH_SECTOR_SIZE},
+        {1, FLASH_BANK_1, 0x08000000 + 1*FLASH_SECTOR_SIZE, FLASH_SECTOR_SIZE},
+        {2, FLASH_BANK_1, 0x08000000 + 2*FLASH_SECTOR_SIZE, FLASH_SECTOR_SIZE},
+        {3, FLASH_BANK_1, 0x08000000 + 3*FLASH_SECTOR_SIZE, FLASH_SECTOR_SIZE},
+        {4, FLASH_BANK_1, 0x08000000 + 4*FLASH_SECTOR_SIZE, FLASH_SECTOR_SIZE},
+        {5, FLASH_BANK_1, 0x08000000 + 5*FLASH_SECTOR_SIZE, FLASH_SECTOR_SIZE},
+        {6, FLASH_BANK_1, 0x08000000 + 6*FLASH_SECTOR_SIZE, FLASH_SECTOR_SIZE},
+        {7, FLASH_BANK_1, 0x08000000 + 7*FLASH_SECTOR_SIZE, FLASH_SECTOR_SIZE},
     };
 
 
@@ -36,9 +44,6 @@ const flash_tbl_t flash_tbl_bank1[FLASH_MAX_SECTOR] =
 #ifdef _USE_HW_CLI
 static void cliFlash(cli_args_t *args);
 #endif
-
-
-
 
 
 bool flashInit(void)

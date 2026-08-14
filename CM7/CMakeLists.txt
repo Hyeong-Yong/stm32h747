@@ -67,11 +67,11 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     App/hw/include/qspi
     App/hw/include/ovtoct
     App/hw/include/galvano
-
     # USB
     App/hw/src/usb
     App/hw/src/usb/usb_cdc
     App/Middlewares/STM32_USB_Device_Library/Inc
+
 
     # QSPI
     App/hw/include/qspi
@@ -87,6 +87,8 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     App/Modules/libiec61850/Src/mms/Inc_private
     App/Modules/SV/Inc
     
+    #OCT
+    App/hw/src/oct_calib
 
     
 
@@ -137,7 +139,8 @@ file(GLOB SRC_FILES CONFIGURE_DEPENDS
     App/Modules/libiec61850/Src/mms/asn1/*.c
     App/Modules/SV/Src/*.c
 
-
+    # oct_calib
+    App/hw/src/oct_calib/*.c
 
 
     #freertos
