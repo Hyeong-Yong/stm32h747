@@ -5,9 +5,9 @@
 
 void apInit(void)
 {
-  cliOpen(_DEF_UART2, 115200);
+  cliOpen(_DEF_UART1, 115200);
   cliLogo();
-  
+
 
   //USB-MODE
   //ovtOct_init();
@@ -32,7 +32,7 @@ void apMain(void)
       ledToggle(_DEF_LED1);
 
     }
-
+    
     //USB-MODE
    //ovtOct_GUI_Run();
     
